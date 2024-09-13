@@ -4,7 +4,8 @@ namespace Fortune.Models.SaveObject
 {
     public class FortuneModel
     {
-        public Guid id { get; set; }
+        public FortuneModel() { id = Guid.NewGuid(); }
+        public Guid id { get;}
         public string LongFortune { get; set; }
         public string ShortFortune { get; set; }
         public byte[] QrImage { get; set; }

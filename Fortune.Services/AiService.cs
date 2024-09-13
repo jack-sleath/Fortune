@@ -26,7 +26,7 @@ namespace Fortune.Services
             throw new NotImplementedException();
         }
 
-        public string GetLogicNumbers()
+        public string GetLuckyNumbers()
         {
             throw new NotImplementedException();
         }
