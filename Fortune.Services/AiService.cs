@@ -5,6 +5,12 @@ namespace Fortune.Services
 {
     public class AiService : IAiService
     {
+        private readonly IExternalAiService _externalAiService;
+        public AiService(IExternalAiService externalAiService)
+        {
+            _externalAiService = externalAiService;
+        }
+
         public FortuneModel GetFortuneData()
         {
             throw new NotImplementedException();
@@ -20,7 +26,7 @@ namespace Fortune.Services
             throw new NotImplementedException();
         }
 
-        public string GetMagicNumbers()
+        public string GetLogicNumbers()
         {
             throw new NotImplementedException();
         }

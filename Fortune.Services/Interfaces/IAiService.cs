@@ -8,6 +8,6 @@ namespace Fortune.Services.Interfaces
         string GetLongFortune();
         string GetShortFortune();
         string GetImageBlob();
-        string GetMagicNumbers();
+        string GetLogicNumbers();
     }
 }

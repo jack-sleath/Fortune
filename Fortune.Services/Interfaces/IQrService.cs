@@ -8,6 +8,6 @@ namespace Fortune.Services.Interfaces
 {
     public interface IQrService
     {
-        string GetQRCodeBlobForGuid();
+        string GetQRCodeBlobForGuid(Guid guid);
     }
 }
