@@ -14,7 +14,7 @@ public class Program
         try
         {
             // Create a new GpioController object
-            using (GpioController controller = new GpioController())
+            using (GpioController controller = new GpioController(PinNumberingScheme.Board))
             {
                 // Open the GPIO pin for output
                 controller.OpenPin(ledPin, PinMode.Output);
