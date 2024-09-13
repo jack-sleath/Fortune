@@ -8,10 +8,10 @@ namespace Fortune.API.Controllers
     [Route("[controller]")]
     public class FortuneController : ControllerBase
     {
-        private readonly IExternalAiService _chatGptService;
-        public FortuneController(IExternalAiService chatGptService)
+        private readonly IExternalAiService _externalAiService;
+        public FortuneController(IExternalAiService externalAiService)
         {
-            _chatGptService = chatGptService;
+            _externalAiService = externalAiService;
         }
 
         [HttpGet(Name = "CreateFortune")]
@@ -23,14 +23,14 @@ namespace Fortune.API.Controllers
         [HttpGet("generate-text")]
         public async Task<IActionResult> GenerateText(string prompt)
         {
-            var response = await _chatGptService.GetChatGptResponse(prompt);
+            var response = await _externalAiService.GenerateTextResponseAsync(prompt);
             return Ok(response);
         }
 
         [HttpGet("generate-image")]
         public async Task<IActionResult> GenerateImage(string prompt)
         {
-            var imageBlob = await _chatGptService.GenerateImageAsync(prompt);
+            var imageBlob = await _externalAiService.GenerateImageAsync(prompt);
             return File(imageBlob, "image/png");
         }
     }
