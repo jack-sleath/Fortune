@@ -19,8 +19,6 @@ namespace Fortune.Machine.Services.Internal
             _inputPin = Settings.ButtonPin;
             _gpioService = gpioService;
             _controller = new GpioController(PinNumberingScheme.Board);
-
-            // Open the input pin for reading input (e.g., a button press)
             _controller.OpenPin(_inputPin, PinMode.InputPullUp);
         }
 
@@ -30,23 +28,19 @@ namespace Fortune.Machine.Services.Internal
 
             while (true)
             {
-                // Wait for a button press (PinValue.Low indicates button press)
                 if (_controller.Read(_inputPin) == PinValue.Low)
                 {
                     Console.WriteLine("Button pressed!");
 
-                    // Call the LED flash method
-                    _gpioService.FlashLed(5, 500);
+                    _gpioService.FlashLed(Settings.LedFlashCount, Settings.LedFlashIntervalMilliseconds);
                 }
 
-                // Add a small delay to avoid excessive CPU usage
                 Thread.Sleep(100);
             }
         }
 
         public void Dispose()
         {
-            // Clean up and close the input pin
             if (_controller.IsPinOpen(_inputPin))
             {
                 _controller.ClosePin(_inputPin);

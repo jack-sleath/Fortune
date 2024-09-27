@@ -8,7 +8,10 @@ namespace Fortune.Machine.Services
 {
     public static class Settings
     {
-        public static int LedPin => 18; // Pin for LED
-        public static int ButtonPin => 17; // Pin for Input (e.g., a button)
+        public static int LedPin => 18;
+        public static int ButtonPin => 17;
+
+        public static int LedFlashCount => 5;
+        public static int LedFlashIntervalMilliseconds => 500;
     }
 }
