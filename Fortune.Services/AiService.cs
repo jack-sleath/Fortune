@@ -1,39 +1,48 @@
-﻿using Fortune.Models.SaveObject;
+﻿using Fortune.Models.Enums;
+using Fortune.Models.SaveObject;
 using Fortune.Services.Interfaces;
+using Fortune.Helpers;
+using Fortune.Models.Configs;
+using Microsoft.Extensions.Options;
+
 
 namespace Fortune.Services
 {
     public class AiService : IAiService
     {
         private readonly IExternalAiService _externalAiService;
-        public AiService(IExternalAiService externalAiService)
+        private readonly LuckyNumberConfig _magicNumberConfig;
+        public AiService(IExternalAiService externalAiService, IOptions<LuckyNumberConfig> magicNumberConfig)
         {
             _externalAiService = externalAiService;
+            _magicNumberConfig = magicNumberConfig.Value;
         }
 
-        public FortuneModel GetFortuneData()
+        public async Task<byte[]> GetImageBlob(EFortuneType eFortuneType, string longFortune)
         {
-            throw new NotImplementedException();
+            var imageFortuneRequest = eFortuneType.ImageFortuneRequest(longFortune);
+
+            var imageFortune = await _externalAiService.GenerateImageAsync(imageFortuneRequest);
+
+            return imageFortune;
         }
 
-        public string GetImageBlob()
+        public async Task<string> GetLongFortune(EFortuneType eFortuneType)
         {
-            throw new NotImplementedException();
+            var longFortuneRequest = eFortuneType.LongFortuneRequest();
+
+            var longFortune = await _externalAiService.GenerateTextResponseAsync(longFortuneRequest);
+
+            return longFortune;
         }
 
-        public string GetLongFortune()
+        public async Task<string> GetShortFortune(EFortuneType eFortuneType, string longFortune)
         {
-            throw new NotImplementedException();
-        }
+            var shortFortuneRequest = eFortuneType.ShortFortuneRequest(longFortune);
 
-        public string GetLuckyNumbers()
-        {
-            throw new NotImplementedException();
-        }
+            var shortFortune = await _externalAiService.GenerateTextResponseAsync(shortFortuneRequest);
 
-        public string GetShortFortune()
-        {
-            throw new NotImplementedException();
+            return shortFortune;
         }
     }
 }

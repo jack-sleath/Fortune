@@ -8,10 +8,10 @@ namespace Fortune.API.Controllers
     [Route("[controller]")]
     public class FortuneController : ControllerBase
     {
-        private readonly IExternalAiService _externalAiService;
-        public FortuneController(IExternalAiService externalAiService)
+        private readonly IFortuneService _fortuneService;
+        public FortuneController(IFortuneService fortuneService)
         {
-            _externalAiService = externalAiService;
+            _fortuneService = fortuneService;
         }
 
         [HttpGet(Name = "CreateFortune")]
@@ -20,18 +20,11 @@ namespace Fortune.API.Controllers
             return StatusCode(200);
         }
 
-        [HttpGet("generate-text")]
-        public async Task<IActionResult> GenerateText(string prompt)
+        [HttpGet("generate")]
+        public async Task<IActionResult> GenerateFortune()
         {
-            var response = await _externalAiService.GenerateTextResponseAsync(prompt);
+            var response = await _fortuneService.GetFortunes();
             return Ok(response);
-        }
-
-        [HttpGet("generate-image")]
-        public async Task<IActionResult> GenerateImage(string prompt)
-        {
-            var imageBlob = await _externalAiService.GenerateImageAsync(prompt);
-            return File(imageBlob, "image/png");
         }
     }
 }

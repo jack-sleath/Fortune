@@ -1,3 +1,4 @@
+using Fortune.Models.Configs;
 using Fortune.Services;
 using Fortune.Services.Interfaces;
 
@@ -18,6 +19,7 @@ builder.Services.AddSwaggerGen();
 
 // Extract the API key from the configuration
 string openAiApiKey = builder.Configuration["ChatGptKey"];
+builder.Services.Configure<LuckyNumberConfig>(builder.Configuration.GetSection("LuckyNumbers"));
 
 // Register the HttpClient for ChatGptService
 builder.Services.AddHttpClient<ChatGptService>();
@@ -28,6 +30,10 @@ builder.Services.AddSingleton<IExternalAiService, ChatGptService>(sp =>
     var httpClient = sp.GetRequiredService<HttpClient>();
     return new ChatGptService(httpClient, openAiApiKey);
 });
+
+
+builder.Services.AddSingleton<IAiService, AiService>();
+builder.Services.AddSingleton<IFortuneService, FortuneService>();
 
 
 var app = builder.Build();

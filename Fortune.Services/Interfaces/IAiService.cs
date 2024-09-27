@@ -1,13 +1,12 @@
-﻿using Fortune.Models.SaveObject;
+﻿using Fortune.Models.Enums;
+using Fortune.Models.SaveObject;
 
 namespace Fortune.Services.Interfaces
 {
     public interface IAiService
-    {
-        FortuneModel GetFortuneData();
-        string GetLongFortune();
-        string GetShortFortune();
-        string GetImageBlob();
-        string GetLuckyNumbers();
+    { 
+        Task<string> GetLongFortune(EFortuneType eFortuneType);
+        Task<string> GetShortFortune(EFortuneType eFortuneType, string longFortune);
+        Task<byte[]> GetImageBlob(EFortuneType eFortuneType, string longFortune);
     }
 }
