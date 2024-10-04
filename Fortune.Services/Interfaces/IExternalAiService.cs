@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace Fortune.Services.Interfaces
 {
-    public interface IQrService
+    public interface IExternalAiService
     {
-        string GetQRCodeBlobForGuid(Guid guid);
+        Task<string> GenerateTextResponseAsync(string prompt);
+        Task<byte[]> GenerateImageAsync(string prompt);
     }
 }

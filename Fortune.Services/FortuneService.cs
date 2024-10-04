@@ -1,22 +1,28 @@
-﻿using Fortune.Models.SaveObject;
+﻿using Fortune.Models.Configs;
+using Fortune.Models.Enums;
+using Fortune.Models.SaveObject;
 using Fortune.Repositories.Interfaces;
 using Fortune.Services.Interfaces;
+using Microsoft.Extensions.Options;
+using Fortune.Helpers;
 
 namespace Fortune.Services
 {
     public class FortuneService : IFortuneService
     {
-        private readonly ITtsService _ttsService;
-        private readonly IQrService _qrService;
+        //private readonly ITtsService _ttsService;
+        //private readonly IQrService _qrService;
         private readonly IAiService _aiService;
-        private readonly IFortuneRepository _fortuneRepository;
+        //private readonly IFortuneRepository _fortuneRepository;
+        private readonly LuckyNumberConfig _luckyNumberConfig;
 
-        public FortuneService(IAiService aiService, IQrService qrService, ITtsService ttsService, IFortuneRepository fortuneRepository)
+        public FortuneService(IAiService aiService, IOptions<LuckyNumberConfig> luckyNumberConfig/*, IQrService qrService, ITtsService ttsService, IFortuneRepository fortuneRepository*/)
         {
             _aiService = aiService;
-            _qrService = qrService;
-            _ttsService = ttsService;
-            _fortuneRepository = fortuneRepository;
+            _luckyNumberConfig = luckyNumberConfig.Value;
+            //_qrService = qrService;
+            //_ttsService = ttsService;
+            //_fortuneRepository = fortuneRepository;
         }
 
         public bool CreateNewFortune()
@@ -24,9 +30,19 @@ namespace Fortune.Services
             throw new NotImplementedException();
         }
 
-        public List<FortuneModel> GetFortunes()
+        public async Task<List<FortuneModel>> GetFortunes()
         {
-            throw new NotImplementedException();
+            var fortuneType = EFortuneType.Generic;
+            var fortune = new FortuneModel();
+
+            fortune.LongFortune = await _aiService.GetLongFortune(fortuneType);
+            fortune.ShortFortune = await _aiService.GetShortFortune(fortuneType, fortune.LongFortune);
+            fortune.ImageTopics = await _aiService.GetImageTopics(fortuneType, fortune.LongFortune);
+            fortune.FortuneImage = (await _aiService.GetImageBlob(fortuneType, fortune.ImageTopics)).ResizeAndConvertToBlackAndWhite(256,256);
+            fortune.LuckyNumbers = _luckyNumberConfig.GetLuckyNumbers();
+
+
+            return new List<FortuneModel> { fortune };
         }
 
         public bool SaveUsedFortune()

@@ -1,33 +1,58 @@
-﻿using Fortune.Models.SaveObject;
+﻿using Fortune.Models.Enums;
+using Fortune.Models.SaveObject;
 using Fortune.Services.Interfaces;
+using Fortune.Helpers;
+using Fortune.Models.Configs;
+using Microsoft.Extensions.Options;
+
 
 namespace Fortune.Services
 {
     public class AiService : IAiService
     {
-        public FortuneModel GetFortuneData()
+        private readonly IExternalAiService _externalAiService;
+        private readonly LuckyNumberConfig _magicNumberConfig;
+        public AiService(IExternalAiService externalAiService, IOptions<LuckyNumberConfig> magicNumberConfig)
         {
-            throw new NotImplementedException();
+            _externalAiService = externalAiService;
+            _magicNumberConfig = magicNumberConfig.Value;
         }
 
-        public string GetImageBlob()
+        public async Task<byte[]> GetImageBlob(EFortuneType eFortuneType, string imageTopics)
         {
-            throw new NotImplementedException();
+            var imageFortuneRequest = eFortuneType.ImageFortuneRequest(imageTopics);
+
+            var imageFortune = await _externalAiService.GenerateImageAsync(imageFortuneRequest);
+
+            return imageFortune;
         }
 
-        public string GetLongFortune()
+        public async Task<string> GetLongFortune(EFortuneType eFortuneType)
         {
-            throw new NotImplementedException();
+            var longFortuneRequest = eFortuneType.LongFortuneRequest();
+
+            var longFortune = await _externalAiService.GenerateTextResponseAsync(longFortuneRequest);
+
+            return longFortune;
         }
 
-        public string GetMagicNumbers()
+        public async Task<string> GetImageTopics(EFortuneType eFortuneType, string longFortune)
         {
-            throw new NotImplementedException();
+            var imageTopicsRequest = eFortuneType.ImageTopicsRequest(longFortune);
+
+            var imageTopics = await _externalAiService.GenerateTextResponseAsync(imageTopicsRequest);
+
+            return imageTopics;
         }
 
-        public string GetShortFortune()
+
+        public async Task<string> GetShortFortune(EFortuneType eFortuneType, string longFortune)
         {
-            throw new NotImplementedException();
+            var shortFortuneRequest = eFortuneType.ShortFortuneRequest(longFortune);
+
+            var shortFortune = await _externalAiService.GenerateTextResponseAsync(shortFortuneRequest);
+
+            return shortFortune;
         }
     }
 }

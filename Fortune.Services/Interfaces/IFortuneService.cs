@@ -11,6 +11,6 @@ namespace Fortune.Services.Interfaces
     {
         bool SaveUsedFortune();
         bool CreateNewFortune();
-        List<FortuneModel> GetFortunes();
+        Task<List<FortuneModel>> GetFortunes();
     }
 }

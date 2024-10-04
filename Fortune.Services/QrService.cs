@@ -4,7 +4,13 @@ namespace Fortune.Services
 {
     public class QrService : IQrService
     {
-        public string GetQRCodeBlobForGuid()
+        private readonly string _webUrl;
+
+        public QrService(string webUrl)
+        {
+            _webUrl = webUrl;
+        }
+        public string GetQRCodeBlobForGuid(Guid id)
         {
             throw new NotImplementedException();
         }
