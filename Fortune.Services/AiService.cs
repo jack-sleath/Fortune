@@ -18,9 +18,9 @@ namespace Fortune.Services
             _magicNumberConfig = magicNumberConfig.Value;
         }
 
-        public async Task<byte[]> GetImageBlob(EFortuneType eFortuneType, string longFortune)
+        public async Task<byte[]> GetImageBlob(EFortuneType eFortuneType, string imageTopics)
         {
-            var imageFortuneRequest = eFortuneType.ImageFortuneRequest(longFortune);
+            var imageFortuneRequest = eFortuneType.ImageFortuneRequest(imageTopics);
 
             var imageFortune = await _externalAiService.GenerateImageAsync(imageFortuneRequest);
 
@@ -35,6 +35,16 @@ namespace Fortune.Services
 
             return longFortune;
         }
+
+        public async Task<string> GetImageTopics(EFortuneType eFortuneType, string longFortune)
+        {
+            var imageTopicsRequest = eFortuneType.ImageTopicsRequest(longFortune);
+
+            var imageTopics = await _externalAiService.GenerateTextResponseAsync(imageTopicsRequest);
+
+            return imageTopics;
+        }
+
 
         public async Task<string> GetShortFortune(EFortuneType eFortuneType, string longFortune)
         {

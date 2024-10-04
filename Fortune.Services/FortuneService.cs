@@ -37,6 +37,8 @@ namespace Fortune.Services
 
             fortune.LongFortune = await _aiService.GetLongFortune(fortuneType);
             fortune.ShortFortune = await _aiService.GetShortFortune(fortuneType, fortune.LongFortune);
+            fortune.ImageTopics = await _aiService.GetImageTopics(fortuneType, fortune.LongFortune);
+            fortune.FortuneImage = (await _aiService.GetImageBlob(fortuneType, fortune.ImageTopics)).ResizeAndConvertToBlackAndWhite(256,256);
             fortune.LuckyNumbers = _luckyNumberConfig.GetLuckyNumbers();
 
 

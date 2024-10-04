@@ -9,6 +9,6 @@ namespace Fortune.Services.Interfaces
     public interface IExternalAiService
     {
         Task<string> GenerateTextResponseAsync(string prompt);
-        Task<byte[]> GenerateImageAsync(string prompt, string size = "1024x1024");
+        Task<byte[]> GenerateImageAsync(string prompt);
     }
 }

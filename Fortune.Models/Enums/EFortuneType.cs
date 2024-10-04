@@ -9,6 +9,7 @@ namespace Fortune.Models.Enums
     public enum EFortuneType
     {
         Generic = 1,
-        ChildFriendly = 2
+        ChildFriendly = 2,
+        Adult = 3 
     }
 }

@@ -6,7 +6,8 @@ namespace Fortune.Services.Interfaces
     public interface IAiService
     { 
         Task<string> GetLongFortune(EFortuneType eFortuneType);
+        Task<string> GetImageTopics(EFortuneType eFortuneType, string longFortune);
         Task<string> GetShortFortune(EFortuneType eFortuneType, string longFortune);
-        Task<byte[]> GetImageBlob(EFortuneType eFortuneType, string longFortune);
+        Task<byte[]> GetImageBlob(EFortuneType eFortuneType, string imageTopics);
     }
 }
