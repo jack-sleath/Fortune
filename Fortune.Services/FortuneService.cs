@@ -11,16 +11,16 @@ namespace Fortune.Services
     public class FortuneService : IFortuneService
     {
         //private readonly ITtsService _ttsService;
-        //private readonly IQrService _qrService;
+        private readonly IQrService _qrService;
         private readonly IAiService _aiService;
         //private readonly IFortuneRepository _fortuneRepository;
         private readonly LuckyNumberConfig _luckyNumberConfig;
 
-        public FortuneService(IAiService aiService, IOptions<LuckyNumberConfig> luckyNumberConfig/*, IQrService qrService, ITtsService ttsService, IFortuneRepository fortuneRepository*/)
+        public FortuneService(IAiService aiService, IOptions<LuckyNumberConfig> luckyNumberConfig, IQrService qrService/*, ITtsService ttsService, IFortuneRepository fortuneRepository*/)
         {
             _aiService = aiService;
             _luckyNumberConfig = luckyNumberConfig.Value;
-            //_qrService = qrService;
+            _qrService = qrService;
             //_ttsService = ttsService;
             //_fortuneRepository = fortuneRepository;
         }
@@ -40,7 +40,7 @@ namespace Fortune.Services
             fortune.ImageTopics = await _aiService.GetImageTopics(fortuneType, fortune.LongFortune);
             fortune.FortuneImage = (await _aiService.GetImageBlob(fortuneType, fortune.ImageTopics)).ResizeAndConvertToBlackAndWhite(256,256);
             fortune.LuckyNumbers = _luckyNumberConfig.GetLuckyNumbers();
-
+            fortune.QrImage = await _qrService.GetQRCodeBlobForGuid(fortune.id);
 
             return new List<FortuneModel> { fortune };
         }

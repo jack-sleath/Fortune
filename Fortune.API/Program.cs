@@ -37,6 +37,12 @@ builder.Services.AddSingleton<IExternalImageAiService, ChatGptService>(sp =>
     return new ChatGptService(httpClient, openAiApiKey);
 });
 
+builder.Services.AddSingleton<IQrService, QrService>(qr =>
+{
+    string siteUrl = builder.Configuration["SiteUrl"];
+    return new QrService(siteUrl);
+});
+
 
 builder.Services.AddSingleton<IAiService, AiService>();
 builder.Services.AddSingleton<IFortuneService, FortuneService>();

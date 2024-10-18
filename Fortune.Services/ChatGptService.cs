@@ -41,8 +41,8 @@ namespace Fortune.Services
 
         public async Task<byte[]> GenerateImageAsync(string prompt)
         {
-#if !DEBUG
-            string imageUrl = "https://oaidalleapiprodscus.blob.core.windows.net/private/org-BWIi40SUWvplZqj5EvLvY0xb/fortune-bot/img-pp7qeezZx1MxpZXhUh8zlqwz.png?st=2024-09-13T17%3A34%3A01Z&se=2024-09-13T19%3A34%3A01Z&sp=r&sv=2024-08-04&sr=b&rscd=inline&rsct=image/png&skoid=d505667d-d6c1-4a0a-bac7-5c84a87759f8&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2024-09-13T18%3A33%3A03Z&ske=2024-09-14T18%3A33%3A03Z&sks=b&skv=2024-08-04&sig=vyf4agfiyKt6X/VoZenr/KuwI9%2BWi%2ByqoB4hObJqOxc%3D";
+#if DEBUG
+            string imageUrl = "https://images.creativefabrica.com/products/previews/2023/10/28/ueUbh74zq/2XN9DphZmDsODrGTFcNNPPFfpqX-mobile.jpg";
 #else
             var requestBody = new
             {
