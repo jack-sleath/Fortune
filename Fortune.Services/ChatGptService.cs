@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 
 namespace Fortune.Services
 {
-    public class ChatGptService : IExternalAiService
+    public class ChatGptService : IExternalTextAiService, IExternalImageAiService
     {
         private readonly string _apiKey;
         private readonly HttpClient _httpClient;

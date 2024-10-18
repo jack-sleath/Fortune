@@ -7,7 +7,7 @@ namespace Fortune.Helpers
     {
         private static string Name = "Professor Fortuna";
 
-        private static string GenericRules = $"Your name is {Name}, a Zoltar like fortune teller, respond as such. Use British English spelling.";
+        private static string GenericRules = $"Your name is {Name}, a Zoltar like fortune teller, respond as such. Use British English spelling. Never mention Zoltar.";
 
         private static string LongFortunePrompt = $"{GenericRules} Give me a fortune in the style of Zoltar that is 150 words. The fortune should have one theme.";
         public static string LongFortuneRequest(this EFortuneType eFortuneType)
@@ -35,7 +35,7 @@ namespace Fortune.Helpers
             }
         }
 
-        private static string TopicsPrompt = $"Ignoring any reference to fortune tellers or the name, {Name}, Create an image of a person experiencing the following fortune. Consider the person's appearance, their facial expression, body language, and the environment around them. Describe all the physical attributes of the image.This should be in 350 characters or less.";
+        private static string TopicsPrompt = $"Ignoring any reference to fortune tellers or the name, {Name}, Create an image of a person experiencing the following fortune. Consider the person's appearance, their facial expression, body language, and the environment around them. Describe all the physical attributes of the image. This should be in 350 characters or less.";
 
         public static string ImageTopicsRequest(this EFortuneType eFortuneType, string longFortune)
         {

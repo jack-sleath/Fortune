@@ -10,11 +10,13 @@ namespace Fortune.Services
 {
     public class AiService : IAiService
     {
-        private readonly IExternalAiService _externalAiService;
+        private readonly IExternalTextAiService _externalTextAiService;
+        private readonly IExternalImageAiService _externalImageAiService;
         private readonly LuckyNumberConfig _magicNumberConfig;
-        public AiService(IExternalAiService externalAiService, IOptions<LuckyNumberConfig> magicNumberConfig)
+        public AiService(IExternalTextAiService externalTextAiService, IExternalImageAiService externalImageAiService, IOptions<LuckyNumberConfig> magicNumberConfig)
         {
-            _externalAiService = externalAiService;
+            _externalTextAiService = externalTextAiService;
+            _externalImageAiService = externalImageAiService;
             _magicNumberConfig = magicNumberConfig.Value;
         }
 
@@ -22,7 +24,7 @@ namespace Fortune.Services
         {
             var imageFortuneRequest = eFortuneType.ImageFortuneRequest(imageTopics);
 
-            var imageFortune = await _externalAiService.GenerateImageAsync(imageFortuneRequest);
+            var imageFortune = await _externalImageAiService.GenerateImageAsync(imageFortuneRequest);
 
             return imageFortune;
         }
@@ -31,7 +33,7 @@ namespace Fortune.Services
         {
             var longFortuneRequest = eFortuneType.LongFortuneRequest();
 
-            var longFortune = await _externalAiService.GenerateTextResponseAsync(longFortuneRequest);
+            var longFortune = await _externalTextAiService.GenerateTextResponseAsync(longFortuneRequest);
 
             return longFortune;
         }
@@ -40,7 +42,7 @@ namespace Fortune.Services
         {
             var imageTopicsRequest = eFortuneType.ImageTopicsRequest(longFortune);
 
-            var imageTopics = await _externalAiService.GenerateTextResponseAsync(imageTopicsRequest);
+            var imageTopics = await _externalTextAiService.GenerateTextResponseAsync(imageTopicsRequest);
 
             return imageTopics;
         }
@@ -50,7 +52,7 @@ namespace Fortune.Services
         {
             var shortFortuneRequest = eFortuneType.ShortFortuneRequest(longFortune);
 
-            var shortFortune = await _externalAiService.GenerateTextResponseAsync(shortFortuneRequest);
+            var shortFortune = await _externalTextAiService.GenerateTextResponseAsync(shortFortuneRequest);
 
             return shortFortune;
         }

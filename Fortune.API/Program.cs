@@ -25,7 +25,13 @@ builder.Services.Configure<LuckyNumberConfig>(builder.Configuration.GetSection("
 builder.Services.AddHttpClient<ChatGptService>();
 
 // Inject the API key and register the ChatGptService with DI
-builder.Services.AddSingleton<IExternalAiService, ChatGptService>(sp =>
+builder.Services.AddSingleton<IExternalTextAiService, ChatGptService>(sp =>
+{
+    var httpClient = sp.GetRequiredService<HttpClient>();
+    return new ChatGptService(httpClient, openAiApiKey);
+});
+
+builder.Services.AddSingleton<IExternalImageAiService, ChatGptService>(sp =>
 {
     var httpClient = sp.GetRequiredService<HttpClient>();
     return new ChatGptService(httpClient, openAiApiKey);
