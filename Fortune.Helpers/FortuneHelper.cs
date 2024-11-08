@@ -35,7 +35,7 @@ namespace Fortune.Helpers
             }
         }
 
-        private static string TopicsPrompt = $"Ignoring any reference to fortune tellers or the name, {Name}, Create an image of a person experiencing the following fortune. Consider the person's appearance, their facial expression, body language, and the environment around them. Describe all the physical attributes of the image. This should be in 350 characters or less.";
+        private static string TopicsPrompt = $"Ignoring any reference to fortune tellers or the name, {Name}, Create an image of a person experiencing the following fortune. Consider the person's appearance, their facial expression, body language, and the environment around them. Describe all the physical attributes of the image except colour. This should be in 350 characters or less.";
 
         public static string ImageTopicsRequest(this EFortuneType eFortuneType, string longFortune)
         {
@@ -51,7 +51,7 @@ namespace Fortune.Helpers
         
         private static string ImageFortunePrompt(string topics)
         {
-            return $"Generate a greyscale image of {topics}.";
+            return $"A black and white image of {topics}. Create this in the style of a 1940s newspaper comic.";
         }
         public static string ImageFortuneRequest(this EFortuneType eFortuneType, string topics)
         {

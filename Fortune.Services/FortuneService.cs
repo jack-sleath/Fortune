@@ -32,17 +32,31 @@ namespace Fortune.Services
 
         public async Task<List<FortuneModel>> GetFortunes()
         {
+            var list = new List<FortuneModel>();
+
+            for (int i = 0; i < 10; i++)
+            {
+                var blah = await GetFortune();
+                list.Add(blah);
+            }
+
+            return list;
+        }
+
+        private async Task<FortuneModel> GetFortune()
+        {
+
             var fortuneType = EFortuneType.Generic;
             var fortune = new FortuneModel();
 
             fortune.LongFortune = await _aiService.GetLongFortune(fortuneType);
             fortune.ShortFortune = await _aiService.GetShortFortune(fortuneType, fortune.LongFortune);
             fortune.ImageTopics = await _aiService.GetImageTopics(fortuneType, fortune.LongFortune);
-            fortune.FortuneImage = (await _aiService.GetImageBlob(fortuneType, fortune.ImageTopics)).ResizeAndConvertToBlackAndWhite(256,256);
+            fortune.FortuneImage = (await _aiService.GetImageBlob(fortuneType, fortune.ImageTopics)).ResizeAndConvertToBlackAndWhite(320, 180);
             fortune.LuckyNumbers = _luckyNumberConfig.GetLuckyNumbers();
             fortune.QrImage = await _qrService.GetQRCodeBlobForGuid(fortune.id);
 
-            return new List<FortuneModel> { fortune };
+            return fortune;
         }
 
         public bool SaveUsedFortune()

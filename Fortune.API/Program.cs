@@ -19,6 +19,7 @@ builder.Services.AddSwaggerGen();
 
 // Extract the API key from the configuration
 string openAiApiKey = builder.Configuration["ChatGptKey"];
+string ideogramApiKey = builder.Configuration["IdeogramKey"];
 builder.Services.Configure<LuckyNumberConfig>(builder.Configuration.GetSection("LuckyNumbers"));
 
 // Register the HttpClient for ChatGptService
@@ -31,10 +32,16 @@ builder.Services.AddSingleton<IExternalTextAiService, ChatGptService>(sp =>
     return new ChatGptService(httpClient, openAiApiKey);
 });
 
-builder.Services.AddSingleton<IExternalImageAiService, ChatGptService>(sp =>
+//builder.Services.AddSingleton<IExternalImageAiService, ChatGptService>(sp =>
+//{
+//    var httpClient = sp.GetRequiredService<HttpClient>();
+//    return new ChatGptService(httpClient, openAiApiKey);
+//});
+
+builder.Services.AddSingleton<IExternalImageAiService, IdeogramService>(sp =>
 {
     var httpClient = sp.GetRequiredService<HttpClient>();
-    return new ChatGptService(httpClient, openAiApiKey);
+    return new IdeogramService(httpClient, ideogramApiKey);
 });
 
 builder.Services.AddSingleton<IQrService, QrService>(qr =>
