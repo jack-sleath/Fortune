@@ -29,17 +29,8 @@ namespace Fortune.Helpers
                         graphics.DrawImage(originalImage, 0, 0, newWidth, newHeight);
                     }
 
-                    //// Convert the resized image to black and white (grayscale)
-                    //ConvertToBlackAndWhite(resizedImage);
-
-                    //// Check if the image is mainly white
-                    //bool isMainlyWhite = IsImageMainlyWhite(resizedImage);
-
-                    //// Invert the image if it's mainly white
-                    //if (isMainlyWhite)
-                    //{
-                    //    InvertImage(resizedImage);
-                    //}
+                    // Convert the resized image to black and white (grayscale)
+                    ConvertToBlackAndWhite(resizedImage);
 
                     using (var outputStream = new MemoryStream())
                     {
@@ -68,46 +59,6 @@ namespace Fortune.Helpers
 
                     // Set the pixel color to the grayscale value
                     image.SetPixel(x, y, grayColor);
-                }
-            }
-        }
-
-        // Method to check if the image is mainly white
-        private static bool IsImageMainlyWhite(Bitmap image)
-        {
-            long totalBrightness = 0;
-            int pixelCount = image.Width * image.Height;
-
-            for (int y = 0; y < image.Height; y++)
-            {
-                for (int x = 0; x < image.Width; x++)
-                {
-                    Color pixelColor = image.GetPixel(x, y);
-                    totalBrightness += pixelColor.R; // Since the image is grayscale, R, G, B are the same
-                }
-            }
-
-            // Calculate average brightness
-            double averageBrightness = totalBrightness / (double)pixelCount;
-
-            // Threshold for determining if the image is mainly white (0 = black, 255 = white)
-            return averageBrightness > 200; // Adjust this threshold value as needed
-        }
-
-        // Method to invert a grayscale image
-        private static void InvertImage(Bitmap image)
-        {
-            for (int y = 0; y < image.Height; y++)
-            {
-                for (int x = 0; x < image.Width; x++)
-                {
-                    Color originalColor = image.GetPixel(x, y);
-
-                    // Invert the grayscale value (255 - current value)
-                    int invertedValue = 255 - originalColor.R; // R, G, B are the same in grayscale
-                    Color invertedColor = Color.FromArgb(invertedValue, invertedValue, invertedValue);
-
-                    image.SetPixel(x, y, invertedColor);
                 }
             }
         }
