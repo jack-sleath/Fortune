@@ -20,29 +20,43 @@ builder.Services.AddSwaggerGen();
 // Extract the API key from the configuration
 string openAiApiKey = builder.Configuration["ChatGptKey"];
 string ideogramApiKey = builder.Configuration["IdeogramKey"];
+string textProvider = builder.Configuration["TextProvider"];
+string imageProvider = builder.Configuration["ImageProvider"];
 builder.Services.Configure<LuckyNumberConfig>(builder.Configuration.GetSection("LuckyNumbers"));
 
 // Register the HttpClient for ChatGptService
 builder.Services.AddHttpClient<ChatGptService>();
 
 // Inject the API key and register the ChatGptService with DI
-builder.Services.AddSingleton<IExternalTextAiService, ChatGptService>(sp =>
-{
-    var httpClient = sp.GetRequiredService<HttpClient>();
-    return new ChatGptService(httpClient, openAiApiKey);
-});
+switch (textProvider.ToUpper()) {
+    case "OPENAI":
+    default:
+        builder.Services.AddSingleton<IExternalTextAiService, ChatGptService>(sp =>
+        {
+            var httpClient = sp.GetRequiredService<HttpClient>();
+            return new ChatGptService(httpClient, openAiApiKey);
+        });
+        break;
+}
 
-//builder.Services.AddSingleton<IExternalImageAiService, ChatGptService>(sp =>
-//{
-//    var httpClient = sp.GetRequiredService<HttpClient>();
-//    return new ChatGptService(httpClient, openAiApiKey);
-//});
-
-builder.Services.AddSingleton<IExternalImageAiService, IdeogramService>(sp =>
+switch (textProvider.ToUpper())
 {
-    var httpClient = sp.GetRequiredService<HttpClient>();
-    return new IdeogramService(httpClient, ideogramApiKey);
-});
+    case "IDEOGRAM":
+        builder.Services.AddSingleton<IExternalImageAiService, IdeogramService>(sp =>
+        {
+            var httpClient = sp.GetRequiredService<HttpClient>();
+            return new IdeogramService(httpClient, ideogramApiKey);
+        });
+        break;
+    case "OPENAI":
+    default:
+        builder.Services.AddSingleton<IExternalImageAiService, ChatGptService>(sp =>
+        {
+            var httpClient = sp.GetRequiredService<HttpClient>();
+            return new ChatGptService(httpClient, openAiApiKey);
+        });
+        break;
+}
 
 builder.Services.AddSingleton<IQrService, QrService>(qr =>
 {
