@@ -14,6 +14,8 @@ namespace Fortune.Helpers
         {
             switch (eFortuneType)
             {
+                case EFortuneType.CurrentAffairs:
+                    return $"{LongFortunePrompt} Ensure it includes this date { DateTime.Today.ToString()} and using this address https://feeds.bbci.co.uk/news/world/rss.xml pick a random article to base the fortune on.";
                 case EFortuneType.ChildFriendly:
                     return $"{LongFortunePrompt} Ensure it is suitable for the children under 7.";
                 case EFortuneType.Generic:

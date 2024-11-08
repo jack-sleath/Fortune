@@ -34,7 +34,7 @@ namespace Fortune.Services
         {
             var list = new List<FortuneModel>();
 
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < 3; i++)
             {
                 var blah = await GetFortune();
                 list.Add(blah);
@@ -46,7 +46,7 @@ namespace Fortune.Services
         private async Task<FortuneModel> GetFortune()
         {
 
-            var fortuneType = EFortuneType.Generic;
+            var fortuneType = EFortuneType.CurrentAffairs;
             var fortune = new FortuneModel();
 
             fortune.LongFortune = await _aiService.GetLongFortune(fortuneType);
