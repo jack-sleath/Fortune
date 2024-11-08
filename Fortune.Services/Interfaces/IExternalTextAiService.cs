@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace Fortune.Services.Interfaces
 {
-    public interface IExternalAiService
+    public interface IExternalTextAiService
     {
         Task<string> GenerateTextResponseAsync(string prompt);
-        Task<byte[]> GenerateImageAsync(string prompt);
     }
 }

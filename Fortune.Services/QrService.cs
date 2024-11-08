@@ -1,4 +1,7 @@
 ﻿using Fortune.Services.Interfaces;
+using QRCoder;
+using System.Drawing.Imaging;
+using System.Drawing;
 
 namespace Fortune.Services
 {
@@ -10,9 +13,19 @@ namespace Fortune.Services
         {
             _webUrl = webUrl;
         }
-        public string GetQRCodeBlobForGuid(Guid id)
+        public async Task<byte[]> GetQRCodeBlobForGuid(Guid id)
         {
-            throw new NotImplementedException();
+            var content = $"{_webUrl}/{id.ToString()}";
+
+            QRCodeGenerator qrGenerator = new QRCodeGenerator();
+
+            QRCodeData qrCodeData = qrGenerator.CreateQrCode(content, QRCodeGenerator.ECCLevel.Q);
+
+            PngByteQRCode qrCode = new PngByteQRCode(qrCodeData);
+
+            byte[] qrCodeImage = qrCode.GetGraphic(20);  
+
+            return qrCodeImage;
         }
     }
 }
