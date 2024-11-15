@@ -39,7 +39,7 @@ namespace Fortune.Helpers
             }
         }
 
-        // Method to convert an image to black and transparent based on luminance
+        // Method to convert an image to black and transparent (black-to-transparent scale)
         public static byte[] ConvertToBlackAndTransparency(this byte[] originalImageBytes)
         {
             using (MemoryStream inputStream = new MemoryStream(originalImageBytes))
@@ -58,8 +58,8 @@ namespace Fortune.Helpers
                             // Calculate the luminance (grayscale value)
                             int luminance = (int)(0.3 * pixelColor.R + 0.59 * pixelColor.G + 0.11 * pixelColor.B);
 
-                            // Set the alpha based on luminance (0 = fully transparent, 255 = fully visible)
-                            int alpha = luminance;
+                            // Set the alpha based on inverted luminance (0 = fully transparent, 255 = fully opaque)
+                            int alpha = 255 - luminance;
 
                             // Create a fully black color with calculated transparency
                             Color transparentBlackColor = Color.FromArgb(alpha, 0, 0, 0);
@@ -78,6 +78,7 @@ namespace Fortune.Helpers
                 }
             }
         }
+
 
 
         public static byte[] CropToAspectRatio(this byte[] originalImageBytes, EAspectRatio aspectRatio)
