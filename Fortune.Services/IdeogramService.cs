@@ -1,4 +1,6 @@
-﻿using Fortune.Services.Interfaces;
+﻿using Fortune.Helpers;
+using Fortune.Models.Enums;
+using Fortune.Services.Interfaces;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -24,6 +26,9 @@ namespace Fortune.Services
 
         public async Task<byte[]> GenerateImageAsync(string prompt)
         {
+#if DEBUG
+            string imageUrl = "https://images.creativefabrica.com/products/previews/2023/10/28/ueUbh74zq/2XN9DphZmDsODrGTFcNNPPFfpqX-mobile.jpg";
+#else
             var requestBody = new
             {
                 image_request = new {
@@ -43,11 +48,12 @@ namespace Fortune.Services
             string imageUrl = jsonResponse.data[0].url;
 
             Console.WriteLine(imageUrl);
+#endif
 
             // Download the image as a byte array
             var imageBytes = await new HttpClient().GetByteArrayAsync(imageUrl);
 
-            return imageBytes;  // Return the byte array representing the image
+            return imageBytes.Resize(320, 180).ConvertToBlackAndWhiteTransparency();  // Return the byte array representing the image
         }
     }
 }
