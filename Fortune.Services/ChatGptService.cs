@@ -65,7 +65,7 @@ namespace Fortune.Services
             // Download the image as a byte array
             var imageBytes = await new HttpClient().GetByteArrayAsync(imageUrl);
 
-            return imageBytes.Resize(128, 128).ConvertToBlackAndWhiteTransparency().CropToAspectRatio(EAspectRatio.SixteenByNine);  // Return the byte array representing the image
+            return imageBytes.Resize(128, 128).ConvertToBlackAndTransparency().CropToAspectRatio(EAspectRatio.SixteenByNine);  // Return the byte array representing the image
         }
     }
 }

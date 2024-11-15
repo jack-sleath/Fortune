@@ -39,8 +39,8 @@ namespace Fortune.Helpers
             }
         }
 
-        // Method to convert an image to black and white (grayscale)
-        public static byte[] ConvertToBlackAndWhiteTransparency(this byte[] originalImageBytes)
+        // Method to convert an image to black and transparent based on luminance
+        public static byte[] ConvertToBlackAndTransparency(this byte[] originalImageBytes)
         {
             using (MemoryStream inputStream = new MemoryStream(originalImageBytes))
             {
@@ -58,15 +58,14 @@ namespace Fortune.Helpers
                             // Calculate the luminance (grayscale value)
                             int luminance = (int)(0.3 * pixelColor.R + 0.59 * pixelColor.G + 0.11 * pixelColor.B);
 
-                            // Determine alpha: 0 (white) to 255 (black)
-                            int alpha = 255 - luminance; // Invert luminance for transparency (white = 0 alpha, black = 255 alpha)
+                            // Set the alpha based on luminance (0 = fully transparent, 255 = fully visible)
+                            int alpha = luminance;
 
-                            // Ensure alpha stays within 0-255 range
-                            alpha = Math.Clamp(alpha, 0, 255);
+                            // Create a fully black color with calculated transparency
+                            Color transparentBlackColor = Color.FromArgb(alpha, 0, 0, 0);
 
-                            // Set the pixel to grayscale with adjusted alpha
-                            Color transparentGrayColor = Color.FromArgb(alpha, luminance, luminance, luminance);
-                            bitmap.SetPixel(x, y, transparentGrayColor);
+                            // Set the new pixel value
+                            bitmap.SetPixel(x, y, transparentBlackColor);
                         }
                     }
 
@@ -79,6 +78,7 @@ namespace Fortune.Helpers
                 }
             }
         }
+
 
         public static byte[] CropToAspectRatio(this byte[] originalImageBytes, EAspectRatio aspectRatio)
         {
