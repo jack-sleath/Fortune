@@ -4,10 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Fortune.Services.Interfaces
+namespace Fortune.Models.Enums
 {
-    public interface IQrService
+    public enum EFortuneType
     {
-        Task<byte[]> GetQRCodeBlobForGuid(Guid guid);
+        Generic = 1,
+        ChildFriendly = 2,
+        Adult = 3 
     }
 }
