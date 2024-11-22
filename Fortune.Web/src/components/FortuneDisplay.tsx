@@ -1,4 +1,5 @@
 import React from 'react';
+import Styles from './FortuneDisplay.module.scss';
 
 // Define the Fortune interface
 interface Fortune {
@@ -20,10 +21,10 @@ interface FortuneProps {
 
 const FortuneDisplay: React.FC<FortuneProps> = ({ fortune }) => {
 
-    const speak = (text) => {
+    const speak = (text: string | undefined) => {
         if ('speechSynthesis' in window) {
           const utterance = new SpeechSynthesisUtterance(text);
-          utterance.lang = 'en-US';
+          utterance.lang = 'en-GB';
           utterance.rate = 1.0; // Speed
           utterance.pitch = 1.0; // Pitch
           speechSynthesis.speak(utterance);
@@ -32,29 +33,31 @@ const FortuneDisplay: React.FC<FortuneProps> = ({ fortune }) => {
         }
       };
       
-      // Example: Add to a button in your React component
-      
-
   return (
-    <div style={{ padding: '20px', maxWidth: '600px', border: '1px solid #ccc', borderRadius: '8px' }}>
+    <div className={Styles.FortuneContainer}>
       {/* Display the main fortune title */}
-      <h2>Professor Fortuna's Fortune Reading</h2>
-
-      {/* Display long fortune text */}
-      <section>
-        <p>{fortune.longFortune}</p>
-      </section>
+      <h1 className={Styles.FortuneHeading}>Your Fortune</h1>
 
       {/* Display fortune image if available */}
       {fortune.fortuneImage && (
         <section>
-          <img
+          <img className={Styles.FortuneImage}
             src={`data:image/png;base64,${fortune.fortuneImage}`}
             alt="Fortune related image"
             style={{ maxWidth: '100%', height: 'auto' }}
           />
         </section>
       )}
+
+      {/* Display long fortune text */}
+      <section>
+        <p>{fortune.longFortune}</p>
+      </section>
+
+      {/* Display play again text */}
+      <section>
+        <h2 className={Styles.PlayAgainSubHeading}>Play Again!</h2>
+      </section>
 
       {/* Display QR code image if available */}
       {fortune.qrImage && (

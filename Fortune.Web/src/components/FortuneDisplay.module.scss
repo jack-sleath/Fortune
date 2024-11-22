@@ -1,0 +1,26 @@
+.FortuneContainer{
+    padding: 20px;
+    max-width: 620px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: antiquewhite;
+}
+.FortuneImage{
+    box-sizing: border-box;
+    width: 100%;
+    border: 5px solid #000;
+
+}
+.FortuneHeading{
+    color: #BB0000;    
+    text-transform: uppercase;
+    font-size: 3em;
+    margin: 0 0 1em;
+}
+
+.PlayAgainSubHeading{
+    color: #BB0000;    
+    text-transform: uppercase;
+    font-size: 2.4em;
+    margin: 0;
+}
