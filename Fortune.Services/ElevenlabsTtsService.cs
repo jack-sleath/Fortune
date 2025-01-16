@@ -30,7 +30,7 @@ namespace Fortune.Services {
             var voiceClip = await apiClient.TextToSpeechEndpoint.TextToSpeechAsync(request);
 
 #if DEBUG
-            await File.WriteAllBytesAsync($"{voiceClip.Id}.mp3", voiceClip.ClipData.ToArray());
+            await File.WriteAllBytesAsync($"Output/Tts/{voiceClip.Id}.mp3", voiceClip.ClipData.ToArray());
 #endif
             return voiceClip.ClipData.ToArray();
         }
