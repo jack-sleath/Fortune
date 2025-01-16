@@ -14,11 +14,11 @@ namespace Fortune.API.Controllers
             _fortuneService = fortuneService;
         }
 
-        [HttpGet(Name = "CreateFortune")]
-        public IActionResult CreateFortune(Guid oldFortuneId)
-        {
+        [HttpGet("create", Name = "CreateFortune")]
+        public IActionResult CreateFortune(Guid oldFortuneId) {
             return StatusCode(200);
         }
+
 
         [HttpGet("generate")]
         public async Task<IActionResult> GenerateFortune()

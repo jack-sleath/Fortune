@@ -4,6 +4,9 @@ using Fortune.Repositories.Interfaces;
 using Fortune.Repositories.MongoDB;
 using Fortune.Services;
 using Fortune.Services.Interfaces;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Serializers;
 using MongoDB.Bson.Serialization;
@@ -29,10 +32,25 @@ string ideogramApiKey = builder.Configuration["IdeogramKey"];
 string textProvider = builder.Configuration["TextProvider"];
 string imageProvider = builder.Configuration["ImageProvider"];
 string dbProvider = builder.Configuration["DbProvider"];
-builder.Services.Configure<LuckyNumberConfig>(builder.Configuration.GetSection("LuckyNumbers"));
-
-// Register the HttpClient for ChatGptService
 builder.Services.AddHttpClient<ChatGptService>();
+builder.Services.Configure<LuckyNumberConfig>(builder.Configuration.GetSection("LuckyNumbers"));
+builder.Services.Configure<TtsConfig>(builder.Configuration.GetSection("TtsConfig"));
+
+
+builder.Services.AddSingleton<ITtsService>(sp => {
+    // Retrieve the TtsConfig instance from the DI container
+    var ttsConfig = sp.GetRequiredService<IOptions<TtsConfig>>().Value;
+
+    switch (ttsConfig.TtsProvider?.ToUpper()) {
+        case "ELEVENLABS":
+            // Pass ttsConfig to the ElevenLabsTtsService
+            return new ElevenlabsTtsService(ttsConfig);
+
+        default:
+            throw new InvalidOperationException($"Unsupported TTS provider: {ttsConfig.TtsProvider}");
+    }
+});
+
 
 // Inject the API key and register the ChatGptService with DI
 switch (textProvider.ToUpper())
