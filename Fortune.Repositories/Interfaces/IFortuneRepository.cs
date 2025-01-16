@@ -9,8 +9,8 @@ namespace Fortune.Repositories.Interfaces
 {
     public interface IFortuneRepository
     {
-        Task<bool> MarkFortuneRead();
+        Task<bool> MarkFortuneRead(Guid id);
         Task<bool> SaveFortune(FortuneModel fortuneModel);
-        Task<List<FortuneModel>> GetFortunes();
+        Task<List<FortuneModel>> GetFortunes(int fortunesToGet);
     }
 }

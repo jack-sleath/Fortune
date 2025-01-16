@@ -34,6 +34,9 @@ namespace Fortune.Repositories.MongoDB.MappedSaveObject
 
         [BsonElement("luckyNumbers")]
         public List<int> LuckyNumbers { get; set; }
+        
+        [BsonElement("fortuneUsed")]
+        public bool FortuneUsed { get; set; }
 
         [BsonElement("fortuneType")]
         public string FortuneType { get; set; }

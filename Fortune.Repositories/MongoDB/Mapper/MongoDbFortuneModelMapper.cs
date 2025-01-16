@@ -22,6 +22,7 @@ namespace Fortune.Repositories.MongoDB.Mapper
                 Audio = model.Audio,
                 FortuneImage = model.FortuneImage,
                 LuckyNumbers = model.LuckyNumbers,
+                FortuneUsed = model.FortuneUsed,
                 FortuneType = model.FortuneType
             };
         }
@@ -38,6 +39,7 @@ namespace Fortune.Repositories.MongoDB.Mapper
                 Audio = mongoModel.Audio,
                 FortuneImage = mongoModel.FortuneImage,
                 LuckyNumbers = mongoModel.LuckyNumbers,
+                FortuneUsed = mongoModel.FortuneUsed,
                 FortuneType = mongoModel.FortuneType
             };
         }
