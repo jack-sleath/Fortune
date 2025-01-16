@@ -4,6 +4,6 @@ namespace Fortune.Services.Interfaces
 {
     public interface ITtsService
     {
-        byte[] GetTTSBlob(string text);
+        Task<byte[]> GetTTSBlob(string text);
     }
 }

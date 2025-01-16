@@ -17,4 +17,8 @@
     <ProjectReference Include="..\Fortune.Services\Fortune.Services.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Output\Tts\" />
+  </ItemGroup>
+
 </Project>
