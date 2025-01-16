@@ -39,7 +39,7 @@ switch (textProvider.ToUpper()) {
         break;
 }
 
-switch (textProvider.ToUpper())
+switch (imageProvider.ToUpper())
 {
     case "IDEOGRAM":
         builder.Services.AddSingleton<IExternalImageAiService, IdeogramService>(sp =>

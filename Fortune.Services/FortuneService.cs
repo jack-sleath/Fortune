@@ -34,7 +34,7 @@ namespace Fortune.Services
         {
             var list = new List<FortuneModel>();
 
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < 15; i++)
             {
                 var blah = await GetFortune();
                 list.Add(blah);
@@ -52,7 +52,7 @@ namespace Fortune.Services
             fortune.LongFortune = await _aiService.GetLongFortune(fortuneType);
             fortune.ShortFortune = await _aiService.GetShortFortune(fortuneType, fortune.LongFortune);
             fortune.ImageTopics = await _aiService.GetImageTopics(fortuneType, fortune.LongFortune);
-            fortune.FortuneImage = (await _aiService.GetImageBlob(fortuneType, fortune.ImageTopics)).ResizeAndConvertToBlackAndWhite(320, 180);
+            fortune.FortuneImage = await _aiService.GetImageBlob(fortuneType, fortune.ImageTopics);
             fortune.LuckyNumbers = _luckyNumberConfig.GetLuckyNumbers();
             fortune.QrImage = await _qrService.GetQRCodeBlobForGuid(fortune.id);
 
