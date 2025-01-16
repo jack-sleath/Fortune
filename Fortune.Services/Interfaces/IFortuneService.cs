@@ -10,7 +10,7 @@ namespace Fortune.Services.Interfaces
     public interface IFortuneService
     {
         bool SaveUsedFortune();
-        bool CreateNewFortune();
+        Task<bool> CreateNewFortune();
         Task<List<FortuneModel>> GetFortunes();
     }
 }

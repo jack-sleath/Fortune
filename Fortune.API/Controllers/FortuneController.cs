@@ -26,5 +26,12 @@ namespace Fortune.API.Controllers
             var response = await _fortuneService.GetFortunes();
             return Ok(response);
         }
+
+        [HttpGet("create")]
+        public async Task<IActionResult> CreateFortune()
+        {
+            var response = await _fortuneService.CreateNewFortune();
+            return Ok(response);
+        }
     }
 }
