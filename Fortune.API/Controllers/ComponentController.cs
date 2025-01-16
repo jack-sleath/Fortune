@@ -20,7 +20,7 @@ namespace Fortune.API.Controllers {
         public IActionResult GenerateAudioFromText(string text) {
             
             var response = _ttsService.GetTTSBlob(text);
-            return StatusCode(200);
+            return Ok(response);
         }
 
         [HttpGet("generateImage", Name = "GenerateImageFromText")]
