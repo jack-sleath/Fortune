@@ -10,6 +10,7 @@ using Microsoft.Extensions.Options;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Serializers;
 using MongoDB.Bson.Serialization;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -115,6 +116,16 @@ builder.Services.AddSingleton<IFortuneService, FortuneService>();
 builder.Services.AddSingleton<IFortuneRepository, MongoDBRepository>();
 
 
+string[] uiUrls = builder.Configuration.GetSection("uiUrls").Get<string[]>();
+
+builder.Services.AddCors(options => {
+    options.AddPolicy("AllowSpecificOrigin", policy => {
+        policy.WithOrigins(uiUrls)
+        .AllowAnyHeader()
+        .AllowAnyMethod();
+    });
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -129,5 +140,7 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseCors("AllowSpecificOrigin");
 
 app.Run();

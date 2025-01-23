@@ -92,15 +92,15 @@ namespace Fortune.Services
         {
             var fortune = (await _fortuneRepository.GetFortunes(1)).First();
 
-            var fortuneRead = await _fortuneRepository.MarkFortuneRead(fortune.id);
+            //var fortuneRead = await _fortuneRepository.MarkFortuneRead(fortune.id);
 
             //log this if fortune not read
 
-            if (fortuneRead) 
-            {
-                var fortuneSaved = await CreateNewFortunes(1);
+            //if (fortuneRead) 
+            //{
+                //var fortuneSaved = await CreateNewFortunes(1);
                 //log if fortune saved does not equal 1
-            }
+            //}
 
             return fortune;
         }

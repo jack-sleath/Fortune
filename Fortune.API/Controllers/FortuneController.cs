@@ -1,3 +1,4 @@
+using Fortune.Models.SaveObject;
 using Fortune.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -16,6 +17,7 @@ namespace Fortune.API.Controllers
         }
 
         [HttpGet("create", Name = "CreateFortunes")]
+        [ProducesResponseType(typeof(int), 200)]
         public async Task<IActionResult> CreateFortunes(int fortunesToCreate)
         {
             var response = await _fortuneService.CreateNewFortunes(fortunesToCreate);
@@ -23,6 +25,7 @@ namespace Fortune.API.Controllers
         }
 
         [HttpGet("get", Name = "GetFortunes")]
+        [ProducesResponseType(typeof(List<FortuneModel>), 200)]
         public async Task<IActionResult> GetFortunes(int fortunesToGet)
         {
             var response = await _fortuneService.GetFortunes(fortunesToGet);
@@ -30,6 +33,7 @@ namespace Fortune.API.Controllers
         }
 
         [HttpGet("getRandom", Name = "GetRandom")]
+        [ProducesResponseType(typeof(FortuneModel), 200)]
         public async Task<IActionResult> GetRandom()
         {
             var response = await _fortuneService.GetRandomFortune();
@@ -37,6 +41,7 @@ namespace Fortune.API.Controllers
         }
 
         [HttpPost("generate", Name = "GenerateFortunes")]
+        [ProducesResponseType(typeof(int), 200)]
         public async Task<IActionResult> GenerateFortunes(List<Guid> usedFortunes)
         {
             var result = await _fortuneService.ClaimAndGenerateFortunes(usedFortunes);

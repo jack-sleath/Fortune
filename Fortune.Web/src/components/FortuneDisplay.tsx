@@ -1,25 +1,31 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Styles from './FortuneDisplay.module.scss';
+import {FortuneModel} from './../api/FortuneApiClient';
+import { getRandomFortune } from '../api/ApiHandler';
 
-// Define the Fortune interface
-interface Fortune {
-  id: string;
-  longFortune: string;
-  shortFortune: string;
-  imageTopics: string;
-  qrImage: string; // Assuming it's a base64 encoded string
-  audio: string | null;
-  fortuneImage: string; // Assuming it's a base64 encoded string
-  luckyNumbers: number[];
-  fortuneType: string;
-}
 
-// Define the component's props interface
-interface FortuneProps {
-  fortune: Fortune;
-}
 
-const FortuneDisplay: React.FC<FortuneProps> = ({ fortune }) => {
+
+
+const FortuneDisplay: React.FC = () => {
+
+
+const[fortune, setFortune] = useState<FortuneModel | null>(null);
+
+useEffect(() => {
+  const fetchData = async () =>{
+    try{
+      const data = await getRandomFortune();
+      if(data){
+        setFortune(data);
+      }
+    }catch(error){
+      console.error("error assigning fortune: ", error);
+    }
+    
+    fetchData();
+  }
+}, [])
 
     const speak = (text: string | undefined) => {
         if ('speechSynthesis' in window) {
@@ -39,10 +45,10 @@ const FortuneDisplay: React.FC<FortuneProps> = ({ fortune }) => {
       <h1 className={Styles.FortuneHeading}>Your Fortune</h1>
 
       {/* Display fortune image if available */}
-      {fortune.fortuneImage && (
+      {fortune?.fortuneImage && (
         <section>
           <img className={Styles.FortuneImage}
-            src={`data:image/png;base64,${fortune.fortuneImage}`}
+            src={`data:image/png;base64,${fortune?.fortuneImage}`}
             alt="Fortune related image"
             style={{ maxWidth: '100%', height: 'auto' }}
           />
@@ -51,7 +57,7 @@ const FortuneDisplay: React.FC<FortuneProps> = ({ fortune }) => {
 
       {/* Display long fortune text */}
       <section>
-        <p>{fortune.longFortune}</p>
+        <p>{fortune?.longFortune}</p>
       </section>
 
       {/* Display play again text */}
@@ -60,11 +66,11 @@ const FortuneDisplay: React.FC<FortuneProps> = ({ fortune }) => {
       </section>
 
       {/* Display QR code image if available */}
-      {fortune.qrImage && (
+      {fortune?.qrImage && (
         <section>
           <h3>QR Code</h3>
           <img
-            src={`data:image/png;base64,${fortune.qrImage}`}
+            src={`data:image/png;base64,${fortune?.qrImage}`}
             alt="QR Code for more information"
             style={{ maxWidth: '150px', height: 'auto' }}
           />
@@ -72,7 +78,7 @@ const FortuneDisplay: React.FC<FortuneProps> = ({ fortune }) => {
       )}
 
       {/* Display audio if available */}
-      {fortune.audio && (
+      {fortune?.audio && (
         <section>
           <h3>Audio Guidance</h3>
           <audio controls>
@@ -85,10 +91,10 @@ const FortuneDisplay: React.FC<FortuneProps> = ({ fortune }) => {
       {/* Display lucky numbers */}
       <section>
         <h3>Lucky Numbers</h3>
-        <p>{fortune.luckyNumbers.join(', ')}</p>
+        <p>{fortune?.luckyNumbers?.join(', ')}</p>
       </section>
 
-      <button onClick={() => speak(fortune.shortFortune)}>Speak</button>
+      <button onClick={() => speak(fortune?.shortFortune)}>Speak</button>
     </div>
   );
 };
