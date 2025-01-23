@@ -25,33 +25,44 @@ namespace Fortune.Services
             _fortuneRepository = fortuneRepository;
         }
 
-        public async Task<bool> CreateNewFortune()
+        public async Task<int> CreateNewFortunes(int fortunesToCreate = 1)
         {
-            var fortuneType = EFortuneType.Generic;
-            var fortune = new FortuneModel();
+            var fortunesCreated = new List<FortuneModel>();
 
-            fortune.LongFortune = await _aiService.GetLongFortune(fortuneType);
-            fortune.ShortFortune = await _aiService.GetShortFortune(fortuneType, fortune.LongFortune);
-            fortune.ImageTopics = await _aiService.GetImageTopics(fortuneType, fortune.LongFortune);
-            fortune.FortuneImage = await _aiService.GetImageBlob(fortuneType, fortune.ImageTopics);
-            fortune.LuckyNumbers = _luckyNumberConfig.GetLuckyNumbers();
-            //fortune.QrImage = await _qrService.GetQRCodeBlobForGuid(fortune.id);
-
-            return await _fortuneRepository.SaveFortune(fortune);
-            //return true;
-        }
-
-        public async Task<List<FortuneModel>> GetFortunes()
-        {
-            var list = new List<FortuneModel>();
-
-            for (int i = 0; i < 15; i++)
+            for (int i = 0; i < fortunesToCreate; i++)
             {
-                var blah = await GetFortune();
-                list.Add(blah);
+                var fortune = await GetFortune();
+                if (fortune != null)
+                {
+                    fortunesCreated.Add(fortune);
+                }
             }
 
-            return list;
+            //log this fortunesCreated.Count if less than fortunesToCreate
+
+            var fortunesSaved = await _fortuneRepository.SaveFortunes(fortunesCreated);
+
+            return fortunesSaved;
+        }
+
+        public async Task<int> ClaimAndGenerateFortunes(List<Guid> usedFortunes)
+        {
+            var fortunesClaimed = await _fortuneRepository.MarkFortunesRead(usedFortunes);
+
+            //log this fortunesClaimed if less than usedFortunes.Count
+
+            var fortunesSaved = await CreateNewFortunes(usedFortunes.Count);
+
+            //log this fortunesSaved if less than usedFortunes.Count
+
+            return fortunesSaved;
+        }
+
+        public async Task<List<FortuneModel>> GetFortunes(int fortunesToGet = 1)
+        {
+            var fortunes = await _fortuneRepository.GetFortunes(fortunesToGet);
+
+            return fortunes;
         }
 
         private async Task<FortuneModel> GetFortune()
@@ -75,37 +86,6 @@ namespace Fortune.Services
             {
                 return null;
             }
-        }
-
-        public bool SaveUsedFortune()
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<int> ClaimAndGenerateFortunes(List<Guid> usedFortunes)
-        {
-            var fortunesClaimed = await _fortuneRepository.MarkFortunesRead(usedFortunes);
-
-            //log this fortunesClaimed if less than usedFortunes.Count
-
-            var fortunesCreated = new List<FortuneModel>();
-
-            for (int i = 0; i < usedFortunes.Count; i++)
-            {
-                var fortune = await GetFortune();
-                if (fortune != null)
-                {
-                    fortunesCreated.Add(fortune);
-                }
-            }
-
-            //log this fortunesCreated.Count if less than usedFortunes.Count 
-
-            var fortunesSaved = await _fortuneRepository.SaveFortunes(fortunesCreated);
-
-            //log this fortunesSaved if less than usedFortunes.Count
-
-            return fortunesSaved;
         }
     }
 }

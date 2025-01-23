@@ -22,7 +22,7 @@ namespace Fortune.Repositories
         {
             var filter = Builders<MongoDbFortuneModel>.Filter.Eq(f => f.FortuneUsed, false);
 
-            var mongoFortunes = await _mongoCollection.Find(filter).ToListAsync();
+            var mongoFortunes = await _mongoCollection.Find(filter).Limit(fortunesToGet).ToListAsync();
 
             return mongoFortunes.Select(MongoDbFortuneModelMapper.ToFortuneModel).ToList();
         }

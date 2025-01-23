@@ -15,15 +15,22 @@ namespace Fortune.API.Controllers
             _fortuneService = fortuneService;
         }
 
-        [HttpGet("create", Name = "CreateFortune")]
-        public async Task<IActionResult> CreateFortune()
+        [HttpGet("create", Name = "CreateFortunes")]
+        public async Task<IActionResult> CreateFortunes(int fortunesToCreate)
         {
-            var response = await _fortuneService.CreateNewFortune();
+            var response = await _fortuneService.CreateNewFortunes(fortunesToCreate);
             return Ok(response);
         }
 
-        [HttpPost("generate")]
-        public async Task<IActionResult> GenerateFortune(List<Guid> usedFortunes)
+        [HttpGet("get", Name = "GetFortunes")]
+        public async Task<IActionResult> GetFortunes(int fortunesToGet)
+        {
+            var response = await _fortuneService.GetFortunes(fortunesToGet);
+            return Ok(response);
+        }
+
+        [HttpPost("generate", Name = "GenerateFortunes")]
+        public async Task<IActionResult> GenerateFortunes(List<Guid> usedFortunes)
         {
             var result = await _fortuneService.ClaimAndGenerateFortunes(usedFortunes);
             return Ok();
