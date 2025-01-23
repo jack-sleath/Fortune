@@ -69,5 +69,15 @@ namespace Fortune.Repositories
             }
             return fortunesSaved;
         }
+
+        public async Task<bool> UnreadAllFortunes()
+        {
+            var filter = Builders<MongoDbFortuneModel>.Filter.Empty;
+            var update = Builders<MongoDbFortuneModel>.Update
+               .Set(f => f.FortuneUsed, false);
+
+            await _mongoCollection.UpdateManyAsync(filter, update);
+            return true;
+        }
     }
 }

@@ -14,5 +14,6 @@ namespace Fortune.Repositories.Interfaces
         Task<List<FortuneModel>> GetFortunes(int fortunesToGet);
         Task<int> MarkFortunesRead(List<Guid> usedFortunes);
         Task<int> SaveFortunes(List<FortuneModel> fortuneModels);
+        Task<bool> UnreadAllFortunes();
     }
 }

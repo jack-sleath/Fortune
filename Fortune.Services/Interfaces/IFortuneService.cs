@@ -12,6 +12,8 @@ namespace Fortune.Services.Interfaces
       
         Task<int> CreateNewFortunes(int fortunesToCreate = 1);
         Task<List<FortuneModel>> GetFortunes(int fortunesToGet = 1);
+        Task<FortuneModel> GetRandomFortune();
         Task<int> ClaimAndGenerateFortunes(List<Guid> usedFortunes);
+        Task<bool> UnreadAllFortunes();
     }
 }
