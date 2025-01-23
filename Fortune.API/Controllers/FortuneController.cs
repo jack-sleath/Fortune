@@ -29,6 +29,13 @@ namespace Fortune.API.Controllers
             return Ok(response);
         }
 
+        [HttpGet("getRandom", Name = "GetRandom")]
+        public async Task<IActionResult> GetRandom()
+        {
+            var response = await _fortuneService.GetRandomFortune();
+            return Ok(response);
+        }
+
         [HttpPost("generate", Name = "GenerateFortunes")]
         public async Task<IActionResult> GenerateFortunes(List<Guid> usedFortunes)
         {

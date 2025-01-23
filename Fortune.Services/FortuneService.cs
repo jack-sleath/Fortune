@@ -25,6 +25,8 @@ namespace Fortune.Services
             _fortuneRepository = fortuneRepository;
         }
 
+
+
         public async Task<int> CreateNewFortunes(int fortunesToCreate = 1)
         {
             var fortunesCreated = new List<FortuneModel>();
@@ -53,8 +55,6 @@ namespace Fortune.Services
 
             var fortunesSaved = await CreateNewFortunes(usedFortunes.Count);
 
-            //log this fortunesSaved if less than usedFortunes.Count
-
             return fortunesSaved;
         }
 
@@ -77,15 +77,37 @@ namespace Fortune.Services
                 fortune.ImageTopics = await _aiService.GetImageTopics(fortuneType, fortune.LongFortune);
                 fortune.FortuneImage = await _aiService.GetImageBlob(fortuneType, fortune.ImageTopics);
                 fortune.LuckyNumbers = _luckyNumberConfig.GetLuckyNumbers();
-                fortune.QrImage = await _qrService.GetQRCodeBlobForGuid(fortune.id);
                 fortune.Audio = await _ttsService.GetTTSBlob(fortune.ShortFortune);
-                fortune.QrImage = await _qrService.GetQRCodeBlobForGuid(fortune.id);
+                //fortune.QrImage = await _qrService.GetQRCodeBlobForGuid(fortune.id);
                 return fortune;
             }
             catch (Exception ex)
             {
+                //log this
                 return null;
             }
+        }
+
+        public async Task<FortuneModel> GetRandomFortune()
+        {
+            var fortune = (await _fortuneRepository.GetFortunes(1)).First();
+
+            var fortuneRead = await _fortuneRepository.MarkFortuneRead(fortune.id);
+
+            //log this if fortune not read
+
+            if (fortuneRead) 
+            {
+                var fortuneSaved = await CreateNewFortunes(1);
+                //log if fortune saved does not equal 1
+            }
+
+            return fortune;
+        }
+
+        public async Task<bool> UnreadAllFortunes()
+        {
+           return await _fortuneRepository.UnreadAllFortunes();
         }
     }
 }
