@@ -1,6 +1,9 @@
 using Fortune.Models.Configs;
 using Fortune.Services;
 using Fortune.Services.Interfaces;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,10 +25,25 @@ string openAiApiKey = builder.Configuration["ChatGptKey"];
 string ideogramApiKey = builder.Configuration["IdeogramKey"];
 string textProvider = builder.Configuration["TextProvider"];
 string imageProvider = builder.Configuration["ImageProvider"];
-builder.Services.Configure<LuckyNumberConfig>(builder.Configuration.GetSection("LuckyNumbers"));
-
-// Register the HttpClient for ChatGptService
 builder.Services.AddHttpClient<ChatGptService>();
+builder.Services.Configure<LuckyNumberConfig>(builder.Configuration.GetSection("LuckyNumbers"));
+builder.Services.Configure<TtsConfig>(builder.Configuration.GetSection("TtsConfig"));
+
+
+builder.Services.AddSingleton<ITtsService>(sp => {
+    // Retrieve the TtsConfig instance from the DI container
+    var ttsConfig = sp.GetRequiredService<IOptions<TtsConfig>>().Value;
+
+    switch (ttsConfig.TtsProvider?.ToUpper()) {
+        case "ELEVENLABS":
+            // Pass ttsConfig to the ElevenLabsTtsService
+            return new ElevenlabsTtsService(ttsConfig);
+
+        default:
+            throw new InvalidOperationException($"Unsupported TTS provider: {ttsConfig.TtsProvider}");
+    }
+});
+
 
 // Inject the API key and register the ChatGptService with DI
 switch (textProvider.ToUpper()) {
@@ -39,7 +57,7 @@ switch (textProvider.ToUpper()) {
         break;
 }
 
-switch (textProvider.ToUpper())
+switch (imageProvider.ToUpper())
 {
     case "IDEOGRAM":
         builder.Services.AddSingleton<IExternalImageAiService, IdeogramService>(sp =>
