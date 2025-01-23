@@ -43,7 +43,7 @@ namespace Fortune.Services
 
         public async Task<byte[]> GenerateImageAsync(string prompt)
         {
-#if DEBUG
+#if !DEBUG
             string imageUrl = "https://images.creativefabrica.com/products/previews/2023/10/28/ueUbh74zq/2XN9DphZmDsODrGTFcNNPPFfpqX-mobile.jpg";
 #else
             var requestBody = new

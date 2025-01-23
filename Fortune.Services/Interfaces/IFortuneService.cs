@@ -12,5 +12,6 @@ namespace Fortune.Services.Interfaces
         bool SaveUsedFortune();
         Task<bool> CreateNewFortune();
         Task<List<FortuneModel>> GetFortunes();
+        Task<int> ClaimAndGenerateFortunes(List<Guid> usedFortunes);
     }
 }

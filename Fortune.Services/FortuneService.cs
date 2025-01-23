@@ -56,23 +56,56 @@ namespace Fortune.Services
 
         private async Task<FortuneModel> GetFortune()
         {
+            try
+            {
+                var fortuneType = EFortuneType.Generic;
+                var fortune = new FortuneModel();
 
-            var fortuneType = EFortuneType.Generic;
-            var fortune = new FortuneModel();
-
-            fortune.LongFortune = await _aiService.GetLongFortune(fortuneType);
-            fortune.ShortFortune = await _aiService.GetShortFortune(fortuneType, fortune.LongFortune);
-            fortune.ImageTopics = await _aiService.GetImageTopics(fortuneType, fortune.LongFortune);
-            fortune.FortuneImage = await _aiService.GetImageBlob(fortuneType, fortune.ImageTopics);
-            fortune.LuckyNumbers = _luckyNumberConfig.GetLuckyNumbers();
-            fortune.QrImage = await _qrService.GetQRCodeBlobForGuid(fortune.id);
-            fortune.Audio = await _ttsService.GetTTSBlob(fortune.ShortFortune);
-            return fortune;
+                fortune.LongFortune = await _aiService.GetLongFortune(fortuneType);
+                fortune.ShortFortune = await _aiService.GetShortFortune(fortuneType, fortune.LongFortune);
+                fortune.ImageTopics = await _aiService.GetImageTopics(fortuneType, fortune.LongFortune);
+                fortune.FortuneImage = await _aiService.GetImageBlob(fortuneType, fortune.ImageTopics);
+                fortune.LuckyNumbers = _luckyNumberConfig.GetLuckyNumbers();
+                fortune.QrImage = await _qrService.GetQRCodeBlobForGuid(fortune.id);
+                fortune.Audio = await _ttsService.GetTTSBlob(fortune.ShortFortune);
+                fortune.QrImage = await _qrService.GetQRCodeBlobForGuid(fortune.id);
+                return fortune;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
         }
 
         public bool SaveUsedFortune()
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<int> ClaimAndGenerateFortunes(List<Guid> usedFortunes)
+        {
+            var fortunesClaimed = await _fortuneRepository.MarkFortunesRead(usedFortunes);
+
+            //log this fortunesClaimed if less than usedFortunes.Count
+
+            var fortunesCreated = new List<FortuneModel>();
+
+            for (int i = 0; i < usedFortunes.Count; i++)
+            {
+                var fortune = await GetFortune();
+                if (fortune != null)
+                {
+                    fortunesCreated.Add(fortune);
+                }
+            }
+
+            //log this fortunesCreated.Count if less than usedFortunes.Count 
+
+            var fortunesSaved = await _fortuneRepository.SaveFortunes(fortunesCreated);
+
+            //log this fortunesSaved if less than usedFortunes.Count
+
+            return fortunesSaved;
         }
     }
 }

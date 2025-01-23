@@ -27,6 +27,19 @@ namespace Fortune.Repositories
             return mongoFortunes.Select(MongoDbFortuneModelMapper.ToFortuneModel).ToList();
         }
 
+        public async Task<int> MarkFortunesRead(List<Guid> usedFortunes)
+        {
+            var fortunesClamied = 0;
+            foreach (var usedFortune in usedFortunes)
+            {
+                if (await MarkFortuneRead(usedFortune))
+                {
+                    fortunesClamied++;
+                }
+            }
+            return fortunesClamied;
+        }
+
         public async Task<bool> MarkFortuneRead(Guid id)
         {
             var filter = Builders<MongoDbFortuneModel>.Filter.Eq(f => f.MongoId, id);
@@ -42,6 +55,19 @@ namespace Fortune.Repositories
             var mongoModel = MongoDbFortuneModelMapper.ToMongoDBModel(fortuneModel);
             await _mongoCollection.InsertOneAsync(mongoModel);
             return true;
+        }
+
+        public async Task<int> SaveFortunes(List<FortuneModel> fortuneModels)
+        {
+            var fortunesSaved = 0;
+            foreach (var fortuneModel in fortuneModels)
+            {
+                if (await SaveFortune(fortuneModel))
+                {
+                    fortunesSaved++;
+                }
+            }
+            return fortunesSaved;
         }
     }
 }

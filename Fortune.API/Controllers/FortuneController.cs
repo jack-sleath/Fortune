@@ -1,6 +1,7 @@
 using Fortune.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 
 namespace Fortune.API.Controllers
 {
@@ -15,23 +16,17 @@ namespace Fortune.API.Controllers
         }
 
         [HttpGet("create", Name = "CreateFortune")]
-        public IActionResult CreateFortune(Guid oldFortuneId) {
-            return StatusCode(200);
-        }
-
-
-        [HttpGet("generate")]
-        public async Task<IActionResult> GenerateFortune()
-        {
-            var response = await _fortuneService.GetFortunes();
-            return Ok(response);
-        }
-
-        [HttpGet("create")]
         public async Task<IActionResult> CreateFortune()
         {
             var response = await _fortuneService.CreateNewFortune();
             return Ok(response);
+        }
+
+        [HttpPost("generate")]
+        public async Task<IActionResult> GenerateFortune(List<Guid> usedFortunes)
+        {
+            var result = await _fortuneService.ClaimAndGenerateFortunes(usedFortunes);
+            return Ok();
         }
     }
 }
