@@ -15,6 +15,7 @@ namespace Fortune.Models.SaveObject
         public byte[] Audio { get; set; }
         public byte[] FortuneImage { get; set; }
         public List<int> LuckyNumbers { get; set; }
+        public bool FortuneUsed { get; set; } = false;
         public string FortuneType { get; set; } = "Default";
 
        
