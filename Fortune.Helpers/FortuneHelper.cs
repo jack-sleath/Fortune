@@ -1,5 +1,6 @@
 ﻿using Fortune.Models.Enums;
 using System.Runtime.CompilerServices;
+using System.Text.Json;
 
 namespace Fortune.Helpers
 {
@@ -14,6 +15,10 @@ namespace Fortune.Helpers
         {
             switch (eFortuneType)
             {
+                case EFortuneType.CurrentAffairs:
+                    var articlesJson = JsonSerializer.Serialize(BBCNewsFeed.GetNewsArticleSummaries().PickRandomArticles(5).Select(x=> new { Title = x.Title, Description = x.Description, Date = x.PubDate.MysticalDate()}).ToList());
+
+                    return $"{LongFortunePrompt}Here are a list of 5 articles {articlesJson}. Pick the happiest story for the fortune. Directly reference the Date then use the Title and Description of the article in the fortune, but not directly in quotes.";
                 case EFortuneType.ChildFriendly:
                     return $"{LongFortunePrompt} Ensure it is suitable for the children under 7.";
                 case EFortuneType.Generic:

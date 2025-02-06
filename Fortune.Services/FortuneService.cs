@@ -33,7 +33,7 @@ namespace Fortune.Services
 
             for (int i = 0; i < fortunesToCreate; i++)
             {
-                var fortune = await GetFortune();
+                var fortune = await GetFortune(EFortuneType.CurrentAffairs);
                 if (fortune != null)
                 {
                     fortunesCreated.Add(fortune);
@@ -65,11 +65,10 @@ namespace Fortune.Services
             return fortunes;
         }
 
-        private async Task<FortuneModel> GetFortune()
+        private async Task<FortuneModel> GetFortune(EFortuneType fortuneType = EFortuneType.Generic)
         {
             try
             {
-                var fortuneType = EFortuneType.Generic;
                 var fortune = new FortuneModel();
 
                 fortune.LongFortune = await _aiService.GetLongFortune(fortuneType);

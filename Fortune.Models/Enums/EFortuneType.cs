@@ -10,6 +10,7 @@ namespace Fortune.Models.Enums
     {
         Generic = 1,
         ChildFriendly = 2,
-        Adult = 3 
+        Adult = 3 ,
+        CurrentAffairs = 4
     }
 }
