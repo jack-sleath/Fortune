@@ -1,25 +1,14 @@
-import { useState } from 'react';
-import './App.css';
+// src/App.tsx
+import React from 'react';
 import FortuneDisplay from './components/FortuneDisplay';
-import fortunes from './data/test_responses.json'; // Import the JSON data
-import {getRandomFortune} from './api/ApiHandler';
 
-const App: React.FC = async () => {
-  const [count, setCount] = useState(0);
-
-  // Pick a random fortune from the array
-  // const randomFortune = fortunes[Math.floor(Math.random() * fortunes.length)];
-  const fetchedFortune = await getRandomFortune();
-  
-
+const App: React.FC = () => {
   return (
-    <>
-      <div>
-        {/* Pass the random fortune to the FortuneDisplay component */}
-        <FortuneDisplay fortune={fetchedFortune} />
-      </div>
-    </>
+    <div>
+      <h1>Random Fortune</h1>
+      <FortuneDisplay />
+    </div>
   );
-}
+};
 
 export default App;
