@@ -1,0 +1,42 @@
+.FortuneContainer {
+    padding: 20px;
+    max-width: 620px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: antiquewhite;
+  }
+  
+  /* Placeholder style for the long fortune text */
+  .LongFortune {
+    font-size: 1.5em;
+    margin-bottom: 1em;
+    color: #333;
+  }
+  
+  /* Container for the fortune image */
+  .FortuneImageContainer {
+    margin-bottom: 1em;
+  }
+  
+  /* Style for images (applied to both fortune and QR images) */
+  .FortuneImage {
+    width: 100%;
+    border: 5px solid #000;
+  }
+  
+  /* Placeholder style for lucky numbers */
+  .LuckyNumbers {
+    margin-bottom: 1em;
+    font-weight: bold;
+  }
+  
+  /* Container for the QR Code image */
+  .QrCode {
+    margin-bottom: 1em;
+  }
+  
+  /* Container for the audio player */
+  .AudioPlay {
+    margin-top: 1em;
+  }
+  

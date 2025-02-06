@@ -10,12 +10,12 @@ using Microsoft.Extensions.Options;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Serializers;
 using MongoDB.Bson.Serialization;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Load User Secrets in Development environment
-if (builder.Environment.IsDevelopment())
-{
+if (builder.Environment.IsDevelopment()) {
     builder.Configuration.AddUserSecrets<Program>();
 }
 
@@ -53,39 +53,33 @@ builder.Services.AddSingleton<ITtsService>(sp => {
 
 
 // Inject the API key and register the ChatGptService with DI
-switch (textProvider.ToUpper())
-{
+switch (textProvider.ToUpper()) {
     case "OPENAI":
     default:
-        builder.Services.AddSingleton<IExternalTextAiService, ChatGptService>(sp =>
-        {
+        builder.Services.AddSingleton<IExternalTextAiService, ChatGptService>(sp => {
             var httpClient = sp.GetRequiredService<HttpClient>();
             return new ChatGptService(httpClient, openAiApiKey);
         });
         break;
 }
 
-switch (imageProvider.ToUpper())
-{
+switch (imageProvider.ToUpper()) {
     case "IDEOGRAM":
-        builder.Services.AddSingleton<IExternalImageAiService, IdeogramService>(sp =>
-        {
+        builder.Services.AddSingleton<IExternalImageAiService, IdeogramService>(sp => {
             var httpClient = sp.GetRequiredService<HttpClient>();
             return new IdeogramService(httpClient, ideogramApiKey);
         });
         break;
     case "OPENAI":
     default:
-        builder.Services.AddSingleton<IExternalImageAiService, ChatGptService>(sp =>
-        {
+        builder.Services.AddSingleton<IExternalImageAiService, ChatGptService>(sp => {
             var httpClient = sp.GetRequiredService<HttpClient>();
             return new ChatGptService(httpClient, openAiApiKey);
         });
         break;
 }
 
-switch (dbProvider.ToUpper())
-{
+switch (dbProvider.ToUpper()) {
     case "MONGODB":
     default:
         BsonSerializer.RegisterSerializer(new GuidSerializer(GuidRepresentation.Standard));
@@ -95,16 +89,14 @@ switch (dbProvider.ToUpper())
 
         builder.Services.AddSingleton<MongoDbContext>();
 
-        builder.Services.AddSingleton<IFortuneRepository, MongoDBRepository>(sp =>
-        {
+        builder.Services.AddSingleton<IFortuneRepository, MongoDBRepository>(sp => {
             var context = sp.GetRequiredService<MongoDbContext>();
             return new MongoDBRepository(context);
         });
         break;
 }
 
-builder.Services.AddSingleton<IQrService, QrService>(qr =>
-{
+builder.Services.AddSingleton<IQrService, QrService>(qr => {
     string siteUrl = builder.Configuration["SiteUrl"];
     return new QrService(siteUrl);
 });
@@ -115,11 +107,20 @@ builder.Services.AddSingleton<IFortuneService, FortuneService>();
 builder.Services.AddSingleton<IFortuneRepository, MongoDBRepository>();
 
 
+string[] uiUrls = builder.Configuration.GetSection("uiUrls").Get<string[]>();
+
+builder.Services.AddCors(options => {
+    options.AddPolicy("AllowSpecificOrigin", policy => {
+        policy.WithOrigins(uiUrls)
+        .AllowAnyHeader()
+        .AllowAnyMethod();
+    });
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
+if (app.Environment.IsDevelopment()) {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
@@ -129,5 +130,7 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseCors("AllowSpecificOrigin");
 
 app.Run();
