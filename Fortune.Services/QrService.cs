@@ -2,6 +2,7 @@
 using QRCoder;
 using System.Drawing.Imaging;
 using System.Drawing;
+using Fortune.Helpers;
 
 namespace Fortune.Services
 {
@@ -23,7 +24,7 @@ namespace Fortune.Services
 
             PngByteQRCode qrCode = new PngByteQRCode(qrCodeData);
 
-            byte[] qrCodeImage = qrCode.GetGraphic(20);  
+            byte[] qrCodeImage = qrCode.GetGraphic(20).ConvertToBlackAndTransparency();  
 
             return qrCodeImage;
         }
