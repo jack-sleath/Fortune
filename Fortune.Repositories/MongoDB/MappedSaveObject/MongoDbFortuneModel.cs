@@ -23,9 +23,6 @@ namespace Fortune.Repositories.MongoDB.MappedSaveObject
         [BsonElement("imageTopics")]
         public string ImageTopics { get; set; }
 
-        [BsonElement("qrImage")]
-        public byte[] QrImage { get; set; }
-
         [BsonElement("audio")]
         public byte[] Audio { get; set; }
 
