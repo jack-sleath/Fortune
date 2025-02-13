@@ -1,4 +1,4 @@
-﻿using Fortune.Helpers;
+﻿using Fortune.Shared.Helpers;
 using Fortune.Models.Enums;
 using Fortune.Services.Interfaces;
 using Newtonsoft.Json;

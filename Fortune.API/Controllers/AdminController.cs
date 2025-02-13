@@ -1,7 +1,7 @@
 ﻿using Fortune.Helpers;
 using Fortune.Models.Enums;
 using Fortune.Services.Interfaces;
-using Microsoft.AspNetCore.Http;
+using Fortune.Shared.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Fortune.API.Controllers {
