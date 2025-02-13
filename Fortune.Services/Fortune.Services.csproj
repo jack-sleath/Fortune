@@ -16,7 +16,7 @@
     <ProjectReference Include="..\Fortune.Helpers\Fortune.Helpers.csproj" />
     <ProjectReference Include="..\Fortune.Models\Fortune.Models.csproj" />
     <ProjectReference Include="..\Fortune.Repositories\Fortune.Repositories.csproj" />
-    <ProjectReference Include="..\Fortune.SharedServices\Fortune.Shared.csproj" />
+    <ProjectReference Include="..\Fortune.Shared\Fortune.Shared.csproj" />
   </ItemGroup>
 
 </Project>
