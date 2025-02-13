@@ -11,7 +11,6 @@ namespace Fortune.Models.SaveObject
         public string LongFortune { get; set; }
         public string ShortFortune { get; set; }
         public string ImageTopics { get; set; }
-        public byte[] QrImage { get; set; }
         public byte[] Audio { get; set; }
         public byte[] FortuneImage { get; set; }
         public List<int> LuckyNumbers { get; set; }

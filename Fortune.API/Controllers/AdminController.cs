@@ -13,13 +13,15 @@ namespace Fortune.API.Controllers {
         private readonly IExternalTextAiService _textAiService;
         private readonly ITtsService _ttsService;
         private readonly IFortuneService _fortuneService;
+        private readonly IQrService _qrService;
 
 
-        public AdminController(IExternalImageAiService imageAiService, IExternalTextAiService textAiService, ITtsService ttsService, IFortuneService fortuneService) {
+        public AdminController(IExternalImageAiService imageAiService, IExternalTextAiService textAiService, ITtsService ttsService, IFortuneService fortuneService, IQrService qrService) {
             _imageAIService = imageAiService;
             _textAiService = textAiService;
             _ttsService = ttsService;
             _fortuneService = fortuneService;
+            _qrService = qrService;
         }
 
         [HttpGet("generateAudio", Name = "GenerateAudioFromText")]
@@ -51,6 +53,14 @@ namespace Fortune.API.Controllers {
         public IActionResult UnreadAllFortunes()
         {
             var response = _fortuneService.UnreadAllFortunes();
+
+            return Ok(response);
+        }
+
+        [HttpGet("generateQr", Name = "GenerateQr")]
+        public IActionResult GenerateQr(Guid guid)
+        {
+            var response = _qrService.GetQRCodeBlobForGuid(guid);
 
             return Ok(response);
         }

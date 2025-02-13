@@ -1,7 +1,5 @@
 ﻿using Fortune.Services.Interfaces;
 using QRCoder;
-using System.Drawing.Imaging;
-using System.Drawing;
 using Fortune.Helpers;
 
 namespace Fortune.Services
@@ -20,13 +18,13 @@ namespace Fortune.Services
 
             QRCodeGenerator qrGenerator = new QRCodeGenerator();
 
-            QRCodeData qrCodeData = qrGenerator.CreateQrCode(content, QRCodeGenerator.ECCLevel.Q);
+            QRCodeData qrCodeData = qrGenerator.CreateQrCode(content, QRCodeGenerator.ECCLevel.H);
 
             PngByteQRCode qrCode = new PngByteQRCode(qrCodeData);
 
-            byte[] qrCodeImage = qrCode.GetGraphic(20).ConvertToBlackAndTransparency();  
+            byte[] qrCodeImage = qrCode.GetGraphic(20);
 
-            return qrCodeImage;
+            return qrCodeImage.ConvertToBlackAndTransparency();
         }
     }
 }
