@@ -44,7 +44,7 @@ namespace Fortune.Shared.Services
 
         private void Log(string message, ELoggingSeverity severity)
         {
-            string logEntry = $"{DateTime.Now:HH:mm:ss} - {message}.";
+            string logEntry = $"{DateTime.Now:HH:mm:ss} - {severity} - {message}.";
 
             if (severity >= ELoggingSeverity.Critical)
             {
