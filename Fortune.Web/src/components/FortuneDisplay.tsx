@@ -30,40 +30,40 @@ const FortuneDisplay: React.FC = () => {
     return <div>Loading fortune...</div>;
   }
 
-  // Convert base64-encoded strings to data URLs.
   const audioSrc = fortune.audio ? `data:audio/mp3;base64,${fortune.audio}` : null;
   const qrImageSrc = fortune.qrImage ? `data:image/png;base64,${fortune.qrImage}` : null;
   const fortuneImageSrc = fortune.fortuneImage ? `data:image/png;base64,${fortune.fortuneImage}` : null;
 
   return (
     <div className={Styles.FortuneContainer}>
-      {/* Long Fortune */}
-      <div className={Styles.LongFortune}>
-        {fortune.longFortune || "No fortune available."}
-      </div>
+      <h1>Your Fortune</h1>
 
-      {/* Fortune Image */}
       {fortuneImageSrc && (
         <div className={Styles.FortuneImageContainer}>
           <img className={Styles.FortuneImage} src={fortuneImageSrc} alt="Fortune" />
         </div>
       )}
 
-      {/* Lucky Numbers */}
-      <div className={Styles.LuckyNumbers}>
-        {fortune.luckyNumbers && fortune.luckyNumbers.length > 0
-          ? fortune.luckyNumbers.join(", ")
-          : "No lucky numbers."}
+      <div className={Styles.LongFortune}>
+        {fortune.longFortune || "No fortune available."}
       </div>
 
-      {/* QR Code */}
+      <div className={Styles.PlayAgain}>
+        Play Again!
+      </div>
+
+      {fortune.luckyNumbers && fortune.luckyNumbers.length > 0 && (
+        <div className={Styles.LuckyNumbers}>
+          Your Lucky Numbers: {fortune.luckyNumbers.join(", ")}
+        </div>
+      )}
+   
       {qrImageSrc && (
         <div className={Styles.QrCode}>
           <img className={Styles.FortuneImage} src={qrImageSrc} alt="QR Code" />
         </div>
       )}
 
-      {/* Audio Play */}
       {audioSrc && (
         <div className={Styles.AudioPlay}>
           <audio controls src={audioSrc}>
