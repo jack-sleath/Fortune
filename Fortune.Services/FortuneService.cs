@@ -97,7 +97,7 @@ namespace Fortune.Services
 
             if (fortuneRead) 
             {
-                var fortuneSaved = await CreateNewFortunes(1);
+                //var fortuneSaved = await CreateNewFortunes(1);
                 //log if fortune saved does not equal 1
             }
 

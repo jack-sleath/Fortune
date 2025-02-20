@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { ApiHandler } from '../api/ApiHandler';
 import { FortuneModel } from '../api/FortuneApiClient';
 import Styles from './FortuneDisplay.module.scss';
+import QRCode from './QRCode';
 
 const FortuneDisplay: React.FC = () => {
   const [fortune, setFortune] = useState<FortuneModel | null>(null);
@@ -32,7 +33,6 @@ const FortuneDisplay: React.FC = () => {
   }
 
   const audioSrc = fortune.audio ? `data:audio/mp3;base64,${fortune.audio}` : null;
-  const qrImageSrc = fortune.qrImage ? `data:image/png;base64,${fortune.qrImage}` : null;
   const fortuneImageSrc = fortune.fortuneImage ? `data:image/png;base64,${fortune.fortuneImage}` : null;
 
   return (
@@ -59,12 +59,10 @@ const FortuneDisplay: React.FC = () => {
         </div>
       )}
    
-      {qrImageSrc && (
-        <div className={Styles.QrCode}>
-          <img className={Styles.FortuneImage} src={qrImageSrc} alt="QR Code" />
-        </div>
+      {fortune.id && (
+        <QRCode value={fortune.id} />
       )}
-
+        
       {audioSrc && (
         <div className={Styles.AudioPlay}>
           <audio controls src={audioSrc}>
