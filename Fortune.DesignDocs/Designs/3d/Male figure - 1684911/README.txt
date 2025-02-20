@@ -1,0 +1,1 @@
+Male figure by 3D-mon on Thingiverse: https://www.thingiverse.com/thing:1684911
