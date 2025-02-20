@@ -11,6 +11,8 @@ using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Serializers;
 using MongoDB.Bson.Serialization;
 using Microsoft.OpenApi.Models;
+using Fortune.Shared.Services.Interfaces;
+using Fortune.Shared.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,6 +37,13 @@ string dbProvider = builder.Configuration["DbProvider"];
 builder.Services.AddHttpClient<ChatGptService>();
 builder.Services.Configure<LuckyNumberConfig>(builder.Configuration.GetSection("LuckyNumbers"));
 builder.Services.Configure<TtsConfig>(builder.Configuration.GetSection("TtsConfig"));
+
+
+builder.Services.AddSingleton<IAiService, AiService>();
+builder.Services.AddSingleton<IFortuneService, FortuneService>();
+builder.Services.AddSingleton<ILoggingService, LoggingService>();
+builder.Services.AddSingleton<IFortuneRepository, MongoDBRepository>();
+
 
 
 builder.Services.AddSingleton<ITtsService>(sp => {
@@ -91,7 +100,8 @@ switch (dbProvider.ToUpper()) {
 
         builder.Services.AddSingleton<IFortuneRepository, MongoDBRepository>(sp => {
             var context = sp.GetRequiredService<MongoDbContext>();
-            return new MongoDBRepository(context);
+            var loggingService = sp.GetRequiredService<ILoggingService>();
+            return new MongoDBRepository(context, loggingService);
         });
         break;
 }
@@ -100,12 +110,6 @@ builder.Services.AddSingleton<IQrService, QrService>(qr => {
     string siteUrl = builder.Configuration["SiteUrl"];
     return new QrService(siteUrl);
 });
-
-
-builder.Services.AddSingleton<IAiService, AiService>();
-builder.Services.AddSingleton<IFortuneService, FortuneService>();
-builder.Services.AddSingleton<IFortuneRepository, MongoDBRepository>();
-
 
 string[] uiUrls = builder.Configuration.GetSection("uiUrls").Get<string[]>();
 

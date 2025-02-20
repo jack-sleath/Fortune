@@ -1,8 +1,8 @@
-﻿using Fortune.Services.Interfaces;
-using QRCoder;
-using Fortune.Helpers;
+﻿using QRCoder;
+using Fortune.Shared.Helpers;
+using Fortune.Shared.Services.Interfaces;
 
-namespace Fortune.Services
+namespace Fortune.Shared.Services
 {
     public class QrService : IQrService
     {

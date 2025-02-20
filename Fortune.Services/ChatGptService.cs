@@ -5,8 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using Fortune.Helpers;
+using Fortune.Shared.Helpers;
 using Fortune.Models.Enums;
+using Fortune.Shared.Models.Enums;
 
 namespace Fortune.Services
 {

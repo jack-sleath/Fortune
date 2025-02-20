@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fortune.Helpers", "Fortune.
 EndProject
 Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "Fortune.Web", "Fortune.Web\Fortune.Web.esproj", "{3761099B-3177-47D1-9D7C-96093A6104D3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fortune.Shared", "Fortune.Shared\Fortune.Shared.csproj", "{43C9333B-CCA0-4220-9D28-982B1D7F418E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,6 +49,10 @@ Global
 		{3761099B-3177-47D1-9D7C-96093A6104D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3761099B-3177-47D1-9D7C-96093A6104D3}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3761099B-3177-47D1-9D7C-96093A6104D3}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{43C9333B-CCA0-4220-9D28-982B1D7F418E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{43C9333B-CCA0-4220-9D28-982B1D7F418E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{43C9333B-CCA0-4220-9D28-982B1D7F418E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{43C9333B-CCA0-4220-9D28-982B1D7F418E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

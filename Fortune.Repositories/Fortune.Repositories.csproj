@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Fortune.Models\Fortune.Models.csproj" />
+    <ProjectReference Include="..\Fortune.Shared\Fortune.Shared.csproj" />
   </ItemGroup>
 
   <ItemGroup>

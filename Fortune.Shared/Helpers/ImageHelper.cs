@@ -1,9 +1,9 @@
-﻿using Fortune.Models.Enums;
+﻿using Fortune.Shared.Models.Enums;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 
-namespace Fortune.Helpers
+namespace Fortune.Shared.Helpers
 {
     public static class ImageHelper
     {
