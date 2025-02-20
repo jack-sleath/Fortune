@@ -11,6 +11,7 @@ const FortuneDisplay: React.FC = () => {
   const fetchFortune = async () => {
     try {
       const result = await ApiHandler.getRandomFortune();
+      console.log(result);
       setFortune(result);
     } catch (err) {
       setError("Failed to fetch fortune.");
@@ -48,7 +49,7 @@ const FortuneDisplay: React.FC = () => {
         {fortune.longFortune || "No fortune available."}
       </div>
 
-      <div className={Styles.PlayAgain}>
+      <div className={Styles.PlayAgain} onClick={() => window.location.reload()}>
         Play Again!
       </div>
 
