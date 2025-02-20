@@ -4,6 +4,7 @@ using Fortune.Repositories.Interfaces;
 using Fortune.Repositories.MongoDB;
 using Fortune.Repositories.MongoDB.MappedSaveObject;
 using Fortune.Repositories.MongoDB.Mapper;
+using Fortune.Shared.Services.Interfaces;
 using MongoDB.Driver;
 
 namespace Fortune.Repositories
@@ -12,19 +13,29 @@ namespace Fortune.Repositories
     {
 
         private readonly IMongoCollection<MongoDbFortuneModel> _mongoCollection;
+        private readonly ILoggingService _loggingService;
 
-        public MongoDBRepository(MongoDbContext context)
+        public MongoDBRepository(MongoDbContext context, ILoggingService loggingService)
         {
             _mongoCollection = context.Fortunes;
+            _loggingService = loggingService;
         }
 
         public async Task<List<FortuneModel>> GetFortunes(int fortunesToGet)
         {
-            var filter = Builders<MongoDbFortuneModel>.Filter.Eq(f => f.FortuneUsed, false);
+            try
+            {
+                var filter = Builders<MongoDbFortuneModel>.Filter.Eq(f => f.FortuneUsed, false);
 
-            var mongoFortunes = await _mongoCollection.Find(filter).Limit(fortunesToGet).ToListAsync();
+                var mongoFortunes = await _mongoCollection.Find(filter).Limit(fortunesToGet).ToListAsync();
 
-            return mongoFortunes.Select(MongoDbFortuneModelMapper.ToFortuneModel).ToList();
+                return mongoFortunes.Select(MongoDbFortuneModelMapper.ToFortuneModel).ToList();
+            }
+            catch (Exception ex)
+            {
+                _loggingService.LogError(ex);
+                return new List<FortuneModel>();
+            }
         }
 
         public async Task<int> MarkFortunesRead(List<Guid> usedFortunes)
@@ -42,19 +53,35 @@ namespace Fortune.Repositories
 
         public async Task<bool> MarkFortuneRead(Guid id)
         {
-            var filter = Builders<MongoDbFortuneModel>.Filter.Eq(f => f.MongoId, id);
-            var update = Builders<MongoDbFortuneModel>.Update
-                .Set(f => f.FortuneUsed, true);
+            try
+            {
+                var filter = Builders<MongoDbFortuneModel>.Filter.Eq(f => f.MongoId, id);
+                var update = Builders<MongoDbFortuneModel>.Update
+                    .Set(f => f.FortuneUsed, true);
 
-            await _mongoCollection.UpdateOneAsync(filter, update);
-            return true;
+                await _mongoCollection.UpdateOneAsync(filter, update);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _loggingService.LogError(ex);
+                return false;
+            }
         }
 
         public async Task<bool> SaveFortune(FortuneModel fortuneModel)
         {
-            var mongoModel = MongoDbFortuneModelMapper.ToMongoDBModel(fortuneModel);
-            await _mongoCollection.InsertOneAsync(mongoModel);
-            return true;
+            try
+            {
+                var mongoModel = MongoDbFortuneModelMapper.ToMongoDBModel(fortuneModel);
+                await _mongoCollection.InsertOneAsync(mongoModel);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _loggingService.LogError(ex);
+                return false;
+            }
         }
 
         public async Task<int> SaveFortunes(List<FortuneModel> fortuneModels)
@@ -72,12 +99,20 @@ namespace Fortune.Repositories
 
         public async Task<bool> UnreadAllFortunes()
         {
-            var filter = Builders<MongoDbFortuneModel>.Filter.Empty;
-            var update = Builders<MongoDbFortuneModel>.Update
-               .Set(f => f.FortuneUsed, false);
+            try
+            {
+                var filter = Builders<MongoDbFortuneModel>.Filter.Empty;
+                var update = Builders<MongoDbFortuneModel>.Update
+                   .Set(f => f.FortuneUsed, false);
 
-            await _mongoCollection.UpdateManyAsync(filter, update);
-            return true;
+                await _mongoCollection.UpdateManyAsync(filter, update);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _loggingService.LogError(ex);
+                return false;
+            }
         }
     }
 }

@@ -1,9 +1,9 @@
-﻿using Fortune.Models.Enums;
+﻿using Fortune.Shared.Models.Enums;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 
-namespace Fortune.Helpers
+namespace Fortune.Shared.Helpers
 {
     public static class ImageHelper
     {
@@ -44,36 +44,45 @@ namespace Fortune.Helpers
         {
             using (MemoryStream inputStream = new MemoryStream(originalImageBytes))
             {
-                // Load the image from the byte array
-                using (Bitmap bitmap = new Bitmap(inputStream))
+                // Load the original image
+                using (Bitmap originalBitmap = new Bitmap(inputStream))
                 {
-                    // Process the image
-                    for (int y = 0; y < bitmap.Height; y++)
+                    // Convert to a writable format (32bpp ARGB)
+                    using (Bitmap bitmap = new Bitmap(originalBitmap.Width, originalBitmap.Height, PixelFormat.Format32bppArgb))
                     {
-                        for (int x = 0; x < bitmap.Width; x++)
+                        using (Graphics g = Graphics.FromImage(bitmap))
                         {
-                            // Get the pixel color
-                            Color pixelColor = bitmap.GetPixel(x, y);
-
-                            // Calculate the luminance (grayscale value)
-                            int luminance = (int)(0.3 * pixelColor.R + 0.59 * pixelColor.G + 0.11 * pixelColor.B);
-
-                            // Set the alpha based on inverted luminance (0 = fully transparent, 255 = fully opaque)
-                            int alpha = 255 - luminance;
-
-                            // Create a fully black color with calculated transparency
-                            Color transparentBlackColor = Color.FromArgb(alpha, 0, 0, 0);
-
-                            // Set the new pixel value
-                            bitmap.SetPixel(x, y, transparentBlackColor);
+                            g.DrawImage(originalBitmap, new Rectangle(0, 0, bitmap.Width, bitmap.Height));
                         }
-                    }
 
-                    // Convert the processed Bitmap back to a byte array
-                    using (MemoryStream outputStream = new MemoryStream())
-                    {
-                        bitmap.Save(outputStream, ImageFormat.Png); // Save as PNG to retain transparency
-                        return outputStream.ToArray();
+                        // Process the image
+                        for (int y = 0; y < bitmap.Height; y++)
+                        {
+                            for (int x = 0; x < bitmap.Width; x++)
+                            {
+                                // Get the pixel color
+                                Color pixelColor = bitmap.GetPixel(x, y);
+
+                                // Calculate the luminance (grayscale value)
+                                int luminance = (int)(0.3 * pixelColor.R + 0.59 * pixelColor.G + 0.11 * pixelColor.B);
+
+                                // Set the alpha based on inverted luminance (0 = fully transparent, 255 = fully opaque)
+                                int alpha = 255 - luminance;
+
+                                // Create a fully black color with calculated transparency
+                                Color transparentBlackColor = Color.FromArgb(alpha, 0, 0, 0);
+
+                                // Set the new pixel value
+                                bitmap.SetPixel(x, y, transparentBlackColor);
+                            }
+                        }
+
+                        // Convert the processed Bitmap back to a byte array
+                        using (MemoryStream outputStream = new MemoryStream())
+                        {
+                            bitmap.Save(outputStream, ImageFormat.Png); // Save as PNG to retain transparency
+                            return outputStream.ToArray();
+                        }
                     }
                 }
             }

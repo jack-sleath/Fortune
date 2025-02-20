@@ -5,24 +5,25 @@ using Fortune.Repositories.Interfaces;
 using Fortune.Services.Interfaces;
 using Microsoft.Extensions.Options;
 using Fortune.Helpers;
+using Fortune.Shared.Services.Interfaces;
 
 namespace Fortune.Services
 {
     public class FortuneService : IFortuneService
     {
         private readonly ITtsService _ttsService;
-        private readonly IQrService _qrService;
         private readonly IAiService _aiService;
         private readonly IFortuneRepository _fortuneRepository;
+        private readonly ILoggingService _loggingService;
         private readonly LuckyNumberConfig _luckyNumberConfig;
 
-        public FortuneService(IAiService aiService, IOptions<LuckyNumberConfig> luckyNumberConfig, IQrService qrService, ITtsService ttsService, IFortuneRepository fortuneRepository)
+        public FortuneService(IAiService aiService, IOptions<LuckyNumberConfig> luckyNumberConfig, ITtsService ttsService, IFortuneRepository fortuneRepository, ILoggingService loggingService)
         {
             _aiService = aiService;
             _luckyNumberConfig = luckyNumberConfig.Value;
-            _qrService = qrService;
             _ttsService = ttsService;
             _fortuneRepository = fortuneRepository;
+            _loggingService = loggingService;
         }
 
 
@@ -40,7 +41,10 @@ namespace Fortune.Services
                 }
             }
 
-            //log this fortunesCreated.Count if less than fortunesToCreate
+            if (fortunesCreated.Count < fortunesToCreate)
+            {
+                _loggingService.LogInfo("Less fortunes created than requested.");
+            }
 
             var fortunesSaved = await _fortuneRepository.SaveFortunes(fortunesCreated);
 
@@ -51,7 +55,10 @@ namespace Fortune.Services
         {
             var fortunesClaimed = await _fortuneRepository.MarkFortunesRead(usedFortunes);
 
-            //log this fortunesClaimed if less than usedFortunes.Count
+            if (fortunesClaimed < usedFortunes.Count)
+            {
+                _loggingService.LogInfo("Less fortunes claimed than used.");
+            }
 
             var fortunesSaved = await CreateNewFortunes(usedFortunes.Count);
 
@@ -77,12 +84,11 @@ namespace Fortune.Services
                 fortune.FortuneImage = await _aiService.GetImageBlob(fortuneType, fortune.ImageTopics);
                 fortune.LuckyNumbers = _luckyNumberConfig.GetLuckyNumbers();
                 fortune.Audio = await _ttsService.GetTTSBlob(fortune.ShortFortune);
-                //fortune.QrImage = await _qrService.GetQRCodeBlobForGuid(fortune.id);
                 return fortune;
             }
             catch (Exception ex)
             {
-                //log this
+                _loggingService.LogError(ex);
                 return null;
             }
         }
@@ -93,12 +99,13 @@ namespace Fortune.Services
 
             var fortuneRead = await _fortuneRepository.MarkFortuneRead(fortune.id);
 
-            //log this if fortune not read
-
-            if (fortuneRead) 
+            if (fortuneRead)
             {
                 //var fortuneSaved = await CreateNewFortunes(1);
-                //log if fortune saved does not equal 1
+            }
+            else
+            {
+                _loggingService.LogInfo("Fortune not marked as read.");
             }
 
             return fortune;
@@ -106,7 +113,7 @@ namespace Fortune.Services
 
         public async Task<bool> UnreadAllFortunes()
         {
-           return await _fortuneRepository.UnreadAllFortunes();
+            return await _fortuneRepository.UnreadAllFortunes();
         }
     }
 }
