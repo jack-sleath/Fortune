@@ -144,7 +144,7 @@ using (var serviceScope = host.Services.CreateScope())
         switch (command.ToUpper())
         {
             case "SHORTFORM":
-                await fortuneService.CreateNewFortunes(1, EFortuneType.CurrentAffairs);
+                await fortuneService.CreateNewFortunes(1, EFortuneType.ShortForm);
                 var fortune = (await fortuneService.GetFortunes(1)).FirstOrDefault();
                 return;
             default:
