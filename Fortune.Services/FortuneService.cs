@@ -28,13 +28,13 @@ namespace Fortune.Services
 
 
 
-        public async Task<int> CreateNewFortunes(int fortunesToCreate = 1)
+        public async Task<int> CreateNewFortunes(int fortunesToCreate = 1, EFortuneType eFortuneType = EFortuneType.Generic)
         {
             var fortunesCreated = new List<FortuneModel>();
 
             for (int i = 0; i < fortunesToCreate; i++)
             {
-                var fortune = await GetFortune(EFortuneType.CurrentAffairs);
+                var fortune = await GetFortune(eFortuneType);
                 if (fortune != null)
                 {
                     fortunesCreated.Add(fortune);

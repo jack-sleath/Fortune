@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static QRCoder.PayloadGenerator.ShadowSocksConfig;
+using Fortune.Shared.Models.Enums;
 
 namespace Fortune.Services
 {
@@ -15,12 +16,18 @@ namespace Fortune.Services
     {
         private readonly string _apiKey;
         private readonly HttpClient _httpClient;
+        private readonly string _aspectRatio;
+        private readonly int _height;
+        private readonly int _width;
 
-        public IdeogramService(HttpClient httpClient, string apiKey)
+        public IdeogramService(HttpClient httpClient, string apiKey, string aspectRatio = "ASPECT_16_9", int width = 320, int height = 180)
         {
             _apiKey = apiKey;
             _httpClient = httpClient;
             _httpClient.DefaultRequestHeaders.Add("Api-Key", _apiKey);
+            _aspectRatio = aspectRatio;
+            _width = width;
+            _height = height;
         }
 
 
@@ -31,9 +38,10 @@ namespace Fortune.Services
 #else
             var requestBody = new
             {
-                image_request = new {
+                image_request = new
+                {
                     prompt = prompt,
-                    aspect_ratio = "ASPECT_16_9",
+                    aspect_ratio = _aspectRatio,
                     model = "V_1_TURBO",
                     magic_prompt_option = "AUTO"
                 }
@@ -53,7 +61,7 @@ namespace Fortune.Services
             // Download the image as a byte array
             var imageBytes = await new HttpClient().GetByteArrayAsync(imageUrl);
 
-            return imageBytes.Resize(320, 180).ConvertToBlackAndTransparency();  // Return the byte array representing the image
+            return imageBytes.Resize(_width, _height).ConvertToBlackAndTransparency();  // Return the byte array representing the image
         }
     }
 }
