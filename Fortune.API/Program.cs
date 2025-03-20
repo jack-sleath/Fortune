@@ -40,7 +40,6 @@ builder.Services.AddHttpClient<ChatGptService>();
 builder.Services.Configure<LuckyNumberConfig>(builder.Configuration.GetSection("LuckyNumbers"));
 builder.Services.Configure<TtsConfig>(builder.Configuration.GetSection("TtsConfig"));
 
-builder.Services.AddSingleton<IBaseAiService, BaseAiService>();
 builder.Services.AddSingleton<ITicketAiService, TicketAiService>();
 builder.Services.AddSingleton<IFortuneService, FortuneService>();
 builder.Services.AddSingleton<ILoggingService, LoggingService>();

@@ -1,6 +1,7 @@
 ﻿using Fortune.Helpers;
 using Fortune.Models.Enums;
 using Fortune.Services.Interfaces;
+using Fortune.Shared.Models.Enums;
 using Fortune.Shared.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -21,10 +22,10 @@ namespace Fortune.API.Controllers
 
 
         public AdminController(
-            IExternalImageAiService imageAiService, 
-            IExternalTextAiService textAiService, 
-            ITtsService ttsService, 
-            IFortuneService fortuneService, 
+            IExternalImageAiService imageAiService,
+            IExternalTextAiService textAiService,
+            ITtsService ttsService,
+            IFortuneService fortuneService,
             IQrService qrService,
             ILoggingService loggingService,
             IFortuneTextService fortuneTextService)
@@ -50,7 +51,7 @@ namespace Fortune.API.Controllers
         public IActionResult GenerateImageFromText(string text)
         {
 
-            var response = _imageAIService.GenerateImageAsync(text);
+            var response = _imageAIService.GenerateImageAsync(text, EAspectRatio.Square, 1080);
 
             return Ok(response);
         }
@@ -80,7 +81,7 @@ namespace Fortune.API.Controllers
 
             return Ok(response);
         }
-       
+
         [HttpGet("generateLogs", Name = "GenerateLogs")]
         public IActionResult GenerateLogs(string message)
         {

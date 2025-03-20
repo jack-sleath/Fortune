@@ -42,7 +42,7 @@ namespace Fortune.Services
             return jsonResponse.choices[0].message.content;
         }
 
-        public async Task<byte[]> GenerateImageAsync(string prompt, EAspectRatio eAspectRatio, int height, int width)
+        public async Task<byte[]> GenerateImageAsync(string prompt, EAspectRatio eAspectRatio, int height)
         {
 #if !DEBUG
             string imageUrl = "https://images.creativefabrica.com/products/previews/2023/10/28/ueUbh74zq/2XN9DphZmDsODrGTFcNNPPFfpqX-mobile.jpg";
