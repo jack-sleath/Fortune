@@ -40,12 +40,14 @@ var builder = Host.CreateDefaultBuilder(args)
         string textProvider = configuration["TextProvider"];
         string imageProvider = configuration["ImageProvider"];
         string dbProvider = configuration["DbProvider"];
+
+
         services.AddHttpClient<ChatGptService>();
         services.Configure<LuckyNumberConfig>(configuration.GetSection("LuckyNumbers"));
         services.Configure<TtsConfig>(configuration.GetSection("TtsConfig"));
 
 
-        services.AddSingleton<IAiService, AiService>();
+        services.AddSingleton<IBaseAiService, BaseAiService>();
         services.AddSingleton<IFortuneService, FortuneService>();
         services.AddSingleton<ILoggingService, LoggingService>();
         services.AddSingleton<IFortuneRepository, MongoDBRepository>();
@@ -88,7 +90,7 @@ var builder = Host.CreateDefaultBuilder(args)
                 services.AddSingleton<IExternalImageAiService, IdeogramService>(sp =>
                 {
                     var httpClient = sp.GetRequiredService<HttpClient>();
-                    return new IdeogramService(httpClient, ideogramApiKey, "ASPECT_9_16", 1080, 1920);
+                    return new IdeogramService(httpClient, ideogramApiKey);
                 });
                 break;
             case "OPENAI":

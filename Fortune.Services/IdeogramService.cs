@@ -16,32 +16,45 @@ namespace Fortune.Services
     {
         private readonly string _apiKey;
         private readonly HttpClient _httpClient;
-        private readonly string _aspectRatio;
-        private readonly int _height;
-        private readonly int _width;
 
-        public IdeogramService(HttpClient httpClient, string apiKey, string aspectRatio = "ASPECT_16_9", int width = 320, int height = 180)
+        public IdeogramService(HttpClient httpClient, string apiKey)
         {
             _apiKey = apiKey;
             _httpClient = httpClient;
             _httpClient.DefaultRequestHeaders.Add("Api-Key", _apiKey);
-            _aspectRatio = aspectRatio;
-            _width = width;
-            _height = height;
         }
 
 
-        public async Task<byte[]> GenerateImageAsync(string prompt)
+        public async Task<byte[]> GenerateImageAsync(string prompt, EAspectRatio eAspectRatio, int height)
         {
 #if !DEBUG
             string imageUrl = "https://images.creativefabrica.com/products/previews/2023/10/28/ueUbh74zq/2XN9DphZmDsODrGTFcNNPPFfpqX-mobile.jpg";
 #else
+            var aspectRatio = "";
+            var width = 0;
+            switch (eAspectRatio)
+            {
+                case EAspectRatio.Square:
+                    aspectRatio = "ASPECT_1_1";
+                    width = height;
+                    break;
+                case EAspectRatio.NineBySixteen:
+                    aspectRatio = "ASPECT_9_16";
+                    width = height / 16 * 9;
+                    break;
+                case EAspectRatio.SixteenByNine:
+                default:
+                    aspectRatio = "ASPECT_16_9";
+                    width = height / 9 * 16;
+                    break;
+            }
+
             var requestBody = new
             {
                 image_request = new
                 {
                     prompt = prompt,
-                    aspect_ratio = _aspectRatio,
+                    aspect_ratio = aspectRatio,
                     model = "V_1_TURBO",
                     magic_prompt_option = "AUTO"
                 }
@@ -61,7 +74,7 @@ namespace Fortune.Services
             // Download the image as a byte array
             var imageBytes = await new HttpClient().GetByteArrayAsync(imageUrl);
 
-            return imageBytes.Resize(_width, _height).ConvertToBlackAndTransparency();  // Return the byte array representing the image
+            return imageBytes.Resize(width, height).ConvertToBlackAndTransparency();  // Return the byte array representing the image
         }
     }
 }

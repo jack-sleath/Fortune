@@ -12,12 +12,12 @@ namespace Fortune.Services
     public class FortuneService : IFortuneService
     {
         private readonly ITtsService _ttsService;
-        private readonly IAiService _aiService;
+        private readonly ITicketAiService _aiService;
         private readonly IFortuneRepository _fortuneRepository;
         private readonly ILoggingService _loggingService;
         private readonly LuckyNumberConfig _luckyNumberConfig;
 
-        public FortuneService(IAiService aiService, IOptions<LuckyNumberConfig> luckyNumberConfig, ITtsService ttsService, IFortuneRepository fortuneRepository, ILoggingService loggingService)
+        public FortuneService(ITicketAiService aiService, IOptions<LuckyNumberConfig> luckyNumberConfig, ITtsService ttsService, IFortuneRepository fortuneRepository, ILoggingService loggingService)
         {
             _aiService = aiService;
             _luckyNumberConfig = luckyNumberConfig.Value;
@@ -25,8 +25,6 @@ namespace Fortune.Services
             _fortuneRepository = fortuneRepository;
             _loggingService = loggingService;
         }
-
-
 
         public async Task<int> CreateNewFortunes(int fortunesToCreate = 1, EFortuneType eFortuneType = EFortuneType.Generic)
         {
@@ -81,7 +79,7 @@ namespace Fortune.Services
                 fortune.LongFortune = await _aiService.GetLongFortune(fortuneType);
                 fortune.ShortFortune = await _aiService.GetShortFortune(fortuneType, fortune.LongFortune);
                 fortune.ImageTopics = await _aiService.GetImageTopics(fortuneType, fortune.LongFortune);
-                fortune.FortuneImage = await _aiService.GetImageBlob(fortuneType, fortune.ImageTopics);
+                fortune.FortuneImage = await _aiService.GetTicketImageBlob(fortuneType, fortune.ImageTopics);
                 fortune.LuckyNumbers = _luckyNumberConfig.GetLuckyNumbers();
                 fortune.Audio = await _ttsService.GetTTSBlob(fortune.ShortFortune);
                 return fortune;

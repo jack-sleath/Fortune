@@ -4,34 +4,28 @@ using Fortune.Services.Interfaces;
 using Fortune.Helpers;
 using Fortune.Models.Configs;
 using Microsoft.Extensions.Options;
+using Fortune.Shared.Models.Enums;
 
 
 namespace Fortune.Services
 {
-    public class AiService : IAiService
+    public abstract class BaseAiService : IBaseAiService
     {
-        private readonly IExternalTextAiService _externalTextAiService;
-        private readonly IExternalImageAiService _externalImageAiService;
-        private readonly LuckyNumberConfig _magicNumberConfig;
-        public AiService(IExternalTextAiService externalTextAiService, IExternalImageAiService externalImageAiService, IOptions<LuckyNumberConfig> magicNumberConfig)
+        protected readonly IExternalTextAiService _externalTextAiService;
+        protected readonly IExternalImageAiService _externalImageAiService;
+        protected readonly IFortuneTextService _fortuneTextService;
+       
+        public BaseAiService(IExternalTextAiService externalTextAiService, IExternalImageAiService externalImageAiService, IFortuneTextService fortuneTextService)
         {
             _externalTextAiService = externalTextAiService;
             _externalImageAiService = externalImageAiService;
-            _magicNumberConfig = magicNumberConfig.Value;
-        }
+            _fortuneTextService = fortuneTextService;
 
-        public async Task<byte[]> GetImageBlob(EFortuneType eFortuneType, string imageTopics)
-        {
-            var imageFortuneRequest = eFortuneType.ImageFortuneRequest(imageTopics);
-
-            var imageFortune = await _externalImageAiService.GenerateImageAsync(imageFortuneRequest);
-
-            return imageFortune;
         }
 
         public async Task<string> GetLongFortune(EFortuneType eFortuneType)
         {
-            var longFortuneRequest = eFortuneType.LongFortuneRequest();
+            var longFortuneRequest = _fortuneTextService.LongFortuneRequest(eFortuneType);
 
             var longFortune = await _externalTextAiService.GenerateTextResponseAsync(longFortuneRequest);
 
@@ -40,7 +34,7 @@ namespace Fortune.Services
 
         public async Task<string> GetImageTopics(EFortuneType eFortuneType, string longFortune)
         {
-            var imageTopicsRequest = eFortuneType.ImageTopicsRequest(longFortune);
+            var imageTopicsRequest = _fortuneTextService.ImageTopicsRequest(eFortuneType, longFortune);
 
             var imageTopics = await _externalTextAiService.GenerateTextResponseAsync(imageTopicsRequest);
 
@@ -50,7 +44,7 @@ namespace Fortune.Services
 
         public async Task<string> GetShortFortune(EFortuneType eFortuneType, string longFortune)
         {
-            var shortFortuneRequest = eFortuneType.ShortFortuneRequest(longFortune);
+            var shortFortuneRequest = _fortuneTextService.ShortFortuneRequest(eFortuneType, longFortune);
 
             var shortFortune = await _externalTextAiService.GenerateTextResponseAsync(shortFortuneRequest);
 

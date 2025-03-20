@@ -17,6 +17,7 @@ namespace Fortune.API.Controllers
         private readonly IFortuneService _fortuneService;
         private readonly IQrService _qrService;
         private readonly ILoggingService _loggingService;
+        private readonly IFortuneTextService _fortuneTextService;
 
 
         public AdminController(
@@ -25,7 +26,8 @@ namespace Fortune.API.Controllers
             ITtsService ttsService, 
             IFortuneService fortuneService, 
             IQrService qrService,
-            ILoggingService loggingService)
+            ILoggingService loggingService,
+            IFortuneTextService fortuneTextService)
         {
             _imageAIService = imageAiService;
             _textAiService = textAiService;
@@ -33,6 +35,7 @@ namespace Fortune.API.Controllers
             _fortuneService = fortuneService;
             _qrService = qrService;
             _loggingService = loggingService;
+            _fortuneTextService = fortuneTextService;
         }
 
         [HttpGet("generateAudio", Name = "GenerateAudioFromText")]
@@ -55,7 +58,7 @@ namespace Fortune.API.Controllers
         [HttpGet("generateLongFortune", Name = "GenerateLongFortune")]
         public IActionResult GenerateLongFortune()
         {
-            var longRequest = FortuneHelper.LongFortuneRequest(EFortuneType.CurrentAffairs);
+            var longRequest = _fortuneTextService.LongFortuneRequest(EFortuneType.CurrentAffairs);
 
             var longResponse = _textAiService.GenerateTextResponseAsync(longRequest);
 
