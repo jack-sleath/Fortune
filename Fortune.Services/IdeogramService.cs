@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static QRCoder.PayloadGenerator.ShadowSocksConfig;
+using Fortune.Shared.Models.Enums;
 
 namespace Fortune.Services
 {
@@ -24,16 +25,36 @@ namespace Fortune.Services
         }
 
 
-        public async Task<byte[]> GenerateImageAsync(string prompt)
+        public async Task<byte[]> GenerateImageAsync(string prompt, EAspectRatio eAspectRatio, int height)
         {
 #if !DEBUG
             string imageUrl = "https://images.creativefabrica.com/products/previews/2023/10/28/ueUbh74zq/2XN9DphZmDsODrGTFcNNPPFfpqX-mobile.jpg";
 #else
+            var aspectRatio = "";
+            var width = 0;
+            switch (eAspectRatio)
+            {
+                case EAspectRatio.Square:
+                    aspectRatio = "ASPECT_1_1";
+                    width = height;
+                    break;
+                case EAspectRatio.NineBySixteen:
+                    aspectRatio = "ASPECT_9_16";
+                    width = height / 16 * 9;
+                    break;
+                case EAspectRatio.SixteenByNine:
+                default:
+                    aspectRatio = "ASPECT_16_9";
+                    width = height / 9 * 16;
+                    break;
+            }
+
             var requestBody = new
             {
-                image_request = new {
+                image_request = new
+                {
                     prompt = prompt,
-                    aspect_ratio = "ASPECT_16_9",
+                    aspect_ratio = aspectRatio,
                     model = "V_1_TURBO",
                     magic_prompt_option = "AUTO"
                 }
@@ -53,7 +74,7 @@ namespace Fortune.Services
             // Download the image as a byte array
             var imageBytes = await new HttpClient().GetByteArrayAsync(imageUrl);
 
-            return imageBytes.Resize(320, 180).ConvertToBlackAndTransparency();  // Return the byte array representing the image
+            return imageBytes.Resize(width, height).ConvertToBlackAndTransparency();  // Return the byte array representing the image
         }
     }
 }

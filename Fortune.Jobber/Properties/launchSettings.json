@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Fortune.Jobber": {
+      "commandName": "Project",
+      "commandLineArgs": "shortform"
+    }
+  }
+}

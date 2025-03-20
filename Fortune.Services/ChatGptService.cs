@@ -42,7 +42,7 @@ namespace Fortune.Services
             return jsonResponse.choices[0].message.content;
         }
 
-        public async Task<byte[]> GenerateImageAsync(string prompt)
+        public async Task<byte[]> GenerateImageAsync(string prompt, EAspectRatio eAspectRatio, int height)
         {
 #if !DEBUG
             string imageUrl = "https://images.creativefabrica.com/products/previews/2023/10/28/ueUbh74zq/2XN9DphZmDsODrGTFcNNPPFfpqX-mobile.jpg";
@@ -66,7 +66,7 @@ namespace Fortune.Services
             // Download the image as a byte array
             var imageBytes = await new HttpClient().GetByteArrayAsync(imageUrl);
 
-            return imageBytes.Resize(128, 128).ConvertToBlackAndTransparency().CropToAspectRatio(EAspectRatio.SixteenByNine);  // Return the byte array representing the image
+            return imageBytes.Resize(height, height).ConvertToBlackAndTransparency().CropToAspectRatio(eAspectRatio);  // Return the byte array representing the image
         }
     }
 }

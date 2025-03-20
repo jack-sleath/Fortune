@@ -3,11 +3,10 @@ using Fortune.Models.SaveObject;
 
 namespace Fortune.Services.Interfaces
 {
-    public interface IAiService
+    public interface IBaseAiService
     { 
         Task<string> GetLongFortune(EFortuneType eFortuneType);
         Task<string> GetImageTopics(EFortuneType eFortuneType, string longFortune);
         Task<string> GetShortFortune(EFortuneType eFortuneType, string longFortune);
-        Task<byte[]> GetImageBlob(EFortuneType eFortuneType, string imageTopics);
     }
 }
