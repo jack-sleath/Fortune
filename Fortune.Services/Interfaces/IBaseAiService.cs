@@ -8,6 +8,5 @@ namespace Fortune.Services.Interfaces
         Task<string> GetLongFortune(EFortuneType eFortuneType);
         Task<string> GetImageTopics(EFortuneType eFortuneType, string longFortune);
         Task<string> GetShortFortune(EFortuneType eFortuneType, string longFortune);
-        //Task<byte[]> GetTicketImageBlob(EFortuneType eFortuneType, string imageTopics);
     }
 }
