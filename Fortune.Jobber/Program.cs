@@ -45,8 +45,9 @@ var builder = Host.CreateDefaultBuilder(args)
         services.Configure<LuckyNumberConfig>(configuration.GetSection("LuckyNumbers"));
         services.Configure<TtsConfig>(configuration.GetSection("TtsConfig"));
 
-        services.AddSingleton<IBaseAiService, BaseAiService>();
-        services.AddSingleton<IFortuneService, FortuneService>();
+        //services.AddSingleton<IBaseAiService, BaseAiService>();
+        services.AddSingleton<IShortFormAiService, ShortFormAiService>();
+        services.AddSingleton<ITicketService, TicketService>();
         services.AddSingleton<ILoggingService, LoggingService>();
         services.AddSingleton<IFortuneRepository, MongoDBRepository>();
 
@@ -136,7 +137,7 @@ using (var serviceScope = host.Services.CreateScope())
 {
     var services = serviceScope.ServiceProvider;
 
-    var fortuneService = services.GetRequiredService<IFortuneService>();
+    var fortuneService = services.GetRequiredService<IShortFormAiService>();
 
     try
     {

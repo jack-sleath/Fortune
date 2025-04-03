@@ -9,8 +9,8 @@ namespace Fortune.API.Controllers
     [Route("[controller]")]
     public class FortuneController : ControllerBase
     {
-        private readonly IFortuneService _fortuneService;
-        public FortuneController(IFortuneService fortuneService)
+        private readonly ITicketService _fortuneService;
+        public FortuneController(ITicketService fortuneService)
         {
             _fortuneService = fortuneService;
         }

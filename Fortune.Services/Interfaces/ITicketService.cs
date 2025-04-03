@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Fortune.Services.Interfaces
 {
-    public interface IFortuneService
+    public interface ITicketService
     {
 
         Task<int> CreateNewFortunes(int fortunesToCreate = 1, EFortuneType eFortuneType = EFortuneType.Generic);

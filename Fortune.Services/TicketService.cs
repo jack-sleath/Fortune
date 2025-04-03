@@ -9,7 +9,7 @@ using Fortune.Shared.Services.Interfaces;
 
 namespace Fortune.Services
 {
-    public class FortuneService : IFortuneService
+    public class TicketService : ITicketService
     {
         private readonly ITtsService _ttsService;
         private readonly ITicketAiService _aiService;
@@ -17,7 +17,7 @@ namespace Fortune.Services
         private readonly ILoggingService _loggingService;
         private readonly LuckyNumberConfig _luckyNumberConfig;
 
-        public FortuneService(ITicketAiService aiService, IOptions<LuckyNumberConfig> luckyNumberConfig, ITtsService ttsService, IFortuneRepository fortuneRepository, ILoggingService loggingService)
+        public TicketService(ITicketAiService aiService, IOptions<LuckyNumberConfig> luckyNumberConfig, ITtsService ttsService, IFortuneRepository fortuneRepository, ILoggingService loggingService)
         {
             _aiService = aiService;
             _luckyNumberConfig = luckyNumberConfig.Value;
