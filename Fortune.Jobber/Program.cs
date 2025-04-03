@@ -41,11 +41,9 @@ var builder = Host.CreateDefaultBuilder(args)
         string imageProvider = configuration["ImageProvider"];
         string dbProvider = configuration["DbProvider"];
 
-
         services.AddHttpClient<ChatGptService>();
         services.Configure<LuckyNumberConfig>(configuration.GetSection("LuckyNumbers"));
         services.Configure<TtsConfig>(configuration.GetSection("TtsConfig"));
-
 
         services.AddSingleton<IBaseAiService, BaseAiService>();
         services.AddSingleton<IFortuneService, FortuneService>();
