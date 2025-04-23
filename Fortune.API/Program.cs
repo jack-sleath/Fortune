@@ -64,6 +64,12 @@ builder.Services.AddSingleton<ITtsService>(sp => {
 
 // Inject the API key and register the ChatGptService with DI
 switch (textProvider.ToUpper()) {
+    case "LOCALDEEPSEEK":
+        builder.Services.AddSingleton<IExternalTextAiService, LocalDeepseekService>(sp => {
+            var httpClient = sp.GetRequiredService<HttpClient>();
+            return new LocalDeepseekService(httpClient);
+        });
+        break;
     case "OPENAI":
     default:
         builder.Services.AddSingleton<IExternalTextAiService, ChatGptService>(sp => {

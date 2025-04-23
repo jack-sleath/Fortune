@@ -47,14 +47,14 @@ namespace Fortune.API.Controllers
             return Ok(response);
         }
 
-        [HttpGet("generateImage", Name = "GenerateImageFromText")]
-        public IActionResult GenerateImageFromText(string text)
-        {
+        //[HttpGet("generateImage", Name = "GenerateImageFromText")]
+        //public IActionResult GenerateImageFromText(string text)
+        //{
 
-            var response = _imageAIService.GenerateImageAsync(text, EAspectRatio.Square, 1080);
+        //    var response = _imageAIService.GenerateImageAsync(text, EAspectRatio.Square, 1080);
 
-            return Ok(response);
-        }
+        //    return Ok(response);
+        //}
 
         [HttpGet("generateLongFortune", Name = "GenerateLongFortune")]
         public IActionResult GenerateLongFortune()
