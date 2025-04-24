@@ -57,11 +57,11 @@ namespace Fortune.API.Controllers
         //}
 
         [HttpGet("generateLongFortune", Name = "GenerateLongFortune")]
-        public IActionResult GenerateLongFortune()
+        public async Task<IActionResult> GenerateLongFortuneAsync()
         {
             var longRequest = _fortuneTextService.LongFortuneRequest(EFortuneType.CurrentAffairs);
 
-            var longResponse = _textAiService.GenerateTextResponseAsync(longRequest);
+            var longResponse = await _textAiService.GenerateTextResponseAsync(longRequest);
 
             return Ok(new { Request = longRequest, Response = longResponse });
         }

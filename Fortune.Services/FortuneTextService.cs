@@ -18,7 +18,7 @@ namespace Fortune.Services
         {
             _name = name;
 
-            _genericRules = $"Your name is {_name}, a Zoltar like fortune teller, respond as such. Use British English spelling. Never mention Zoltar.";
+            _genericRules = $"Your name is {_name}, a Zoltar like fortune teller, respond as such. Use British English spelling. Never mention Zoltar. No markdown language. No emojis.";
 
             _longFortunePrompt = $"{_genericRules} Give me a fortune in the style of Zoltar that is 150 words. The fortune should have one theme.";
 
@@ -35,7 +35,7 @@ namespace Fortune.Services
             switch (eFortuneType)
             {
                 case EFortuneType.CurrentAffairs:
-                    var currentAffairsArticlesJson = JsonSerializer.Serialize(BBCNewsFeed.GetNewsArticleSummaries().PickRandomArticles(5).Select(x => new { Title = x.Title, Description = x.Description, Date = x.PubDate.MysticalDate() }).ToList());
+                    var currentAffairsArticlesJson = JsonSerializer.Serialize(BBCNewsFeed.GetNewsArticleSummaries().PickRandomArticles(10).Select(x => new { Title = x.Title, Description = x.Description, Date = x.PubDate.MysticalDate() }).ToList());
 
                     return $"{_longFortunePrompt} Here are a list of 5 articles {currentAffairsArticlesJson}. Pick the happiest story for the fortune. Directly reference the Date then use the Title and Description of the article in the fortune, but not directly in quotes and dont mention its from an article.";
                 case EFortuneType.ShortForm:

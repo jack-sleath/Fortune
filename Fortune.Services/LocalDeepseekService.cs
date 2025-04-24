@@ -30,20 +30,29 @@ namespace Fortune.Services
                 stream = false
             };
 
-            // 2) Serialize & wrap in StringContent
             var json = JsonConvert.SerializeObject(requestBody);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-            // 3) Post to your local endpoint
             var response = await _httpClient.PostAsync(
                 "http://localhost:11434/api/generate",
                 content
             );
             response.EnsureSuccessStatusCode();
 
-            // 4) Read the entire response as a string
-            //    (if your API truly streams SSE, see the streaming example below)
-            return await response.Content.ReadAsStringAsync();
+            var responseContent = await response.Content.ReadAsStringAsync();
+
+            return ProcessResponse(responseContent);
+        }
+
+        private string ProcessResponse(string responseContent)
+        {
+            var content = JsonConvert.DeserializeObject<dynamic>(responseContent);
+
+            var responseString = content.response.ToString();
+
+            string noThinkString = responseString.Split("</think>")[1];
+
+            return noThinkString;
         }
     }
 }
