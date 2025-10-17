@@ -34,14 +34,13 @@ string ideogramApiKey = builder.Configuration["IdeogramKey"];
 string textProvider = builder.Configuration["TextProvider"];
 string imageProvider = builder.Configuration["ImageProvider"];
 string dbProvider = builder.Configuration["DbProvider"];
-
 builder.Services.AddHttpClient<ChatGptService>();
-
 builder.Services.Configure<LuckyNumberConfig>(builder.Configuration.GetSection("LuckyNumbers"));
 builder.Services.Configure<TtsConfig>(builder.Configuration.GetSection("TtsConfig"));
 
-builder.Services.AddSingleton<ITicketAiService, TicketAiService>();
-builder.Services.AddSingleton<IFortuneService, FortuneService>();
+
+builder.Services.AddSingleton<IAiService, AiService>();
+builder.Services.AddSingleton<ITicketService, TicketService>();
 builder.Services.AddSingleton<ILoggingService, LoggingService>();
 builder.Services.AddSingleton<IFortuneRepository, MongoDBRepository>();
 
@@ -116,11 +115,6 @@ switch (dbProvider.ToUpper()) {
 builder.Services.AddSingleton<IQrService, QrService>(qr => {
     string siteUrl = builder.Configuration["SiteUrl"];
     return new QrService(siteUrl);
-});
-
-builder.Services.AddSingleton<IFortuneTextService, FortuneTextService>(sp => {
-    string fortuneTellerName = builder.Configuration["FortuneTellerName"];
-    return new FortuneTextService(fortuneTellerName);
 });
 
 string[] uiUrls = builder.Configuration.GetSection("uiUrls").Get<string[]>();

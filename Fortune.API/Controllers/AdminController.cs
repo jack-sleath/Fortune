@@ -1,7 +1,6 @@
 ﻿using Fortune.Helpers;
 using Fortune.Models.Enums;
 using Fortune.Services.Interfaces;
-using Fortune.Shared.Models.Enums;
 using Fortune.Shared.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,20 +14,18 @@ namespace Fortune.API.Controllers
         private readonly IExternalImageAiService _imageAIService;
         private readonly IExternalTextAiService _textAiService;
         private readonly ITtsService _ttsService;
-        private readonly IFortuneService _fortuneService;
+        private readonly ITicketService _fortuneService;
         private readonly IQrService _qrService;
         private readonly ILoggingService _loggingService;
-        private readonly IFortuneTextService _fortuneTextService;
 
 
         public AdminController(
-            IExternalImageAiService imageAiService,
-            IExternalTextAiService textAiService,
-            ITtsService ttsService,
-            IFortuneService fortuneService,
+            IExternalImageAiService imageAiService, 
+            IExternalTextAiService textAiService, 
+            ITtsService ttsService, 
+            ITicketService fortuneService, 
             IQrService qrService,
-            ILoggingService loggingService,
-            IFortuneTextService fortuneTextService)
+            ILoggingService loggingService)
         {
             _imageAIService = imageAiService;
             _textAiService = textAiService;
@@ -36,7 +33,6 @@ namespace Fortune.API.Controllers
             _fortuneService = fortuneService;
             _qrService = qrService;
             _loggingService = loggingService;
-            _fortuneTextService = fortuneTextService;
         }
 
         [HttpGet("generateAudio", Name = "GenerateAudioFromText")]
@@ -59,7 +55,7 @@ namespace Fortune.API.Controllers
         [HttpGet("generateLongFortune", Name = "GenerateLongFortune")]
         public async Task<IActionResult> GenerateLongFortuneAsync()
         {
-            var longRequest = _fortuneTextService.LongFortuneRequest(EFortuneType.CurrentAffairs);
+            var longRequest = FortuneHelper.LongFortuneRequest(EFortuneType.CurrentAffairs);
 
             var longResponse = await _textAiService.GenerateTextResponseAsync(longRequest);
 
@@ -81,7 +77,7 @@ namespace Fortune.API.Controllers
 
             return Ok(response);
         }
-
+       
         [HttpGet("generateLogs", Name = "GenerateLogs")]
         public IActionResult GenerateLogs(string message)
         {
