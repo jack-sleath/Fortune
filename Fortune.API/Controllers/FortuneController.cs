@@ -1,5 +1,7 @@
+using Fortune.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 
 namespace Fortune.API.Controllers
 {
@@ -7,16 +9,38 @@ namespace Fortune.API.Controllers
     [Route("[controller]")]
     public class FortuneController : ControllerBase
     {
-
-        public FortuneController()
+        private readonly ITicketService _fortuneService;
+        public FortuneController(ITicketService fortuneService)
         {
-            
+            _fortuneService = fortuneService;
         }
 
-        [HttpGet(Name = "CreateFortune")]
-        public IActionResult CreateFortune(Guid oldFortuneId)
+        [HttpGet("create", Name = "CreateFortunes")]
+        public async Task<IActionResult> CreateFortunes(int fortunesToCreate)
         {
-            return StatusCode(200);
+            var response = await _fortuneService.CreateNewFortunes(fortunesToCreate);
+            return Ok(response);
+        }
+
+        [HttpGet("get", Name = "GetFortunes")]
+        public async Task<IActionResult> GetFortunes(int fortunesToGet)
+        {
+            var response = await _fortuneService.GetFortunes(fortunesToGet);
+            return Ok(response);
+        }
+
+        [HttpGet("getRandom", Name = "GetRandom")]
+        public async Task<IActionResult> GetRandom()
+        {
+            var response = await _fortuneService.GetRandomFortune();
+            return Ok(response);
+        }
+
+        [HttpPost("generate", Name = "GenerateFortunes")]
+        public async Task<IActionResult> GenerateFortunes(List<Guid> usedFortunes)
+        {
+            var result = await _fortuneService.ClaimAndGenerateFortunes(usedFortunes);
+            return Ok();
         }
     }
 }

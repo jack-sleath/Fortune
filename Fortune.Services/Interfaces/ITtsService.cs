@@ -1,7 +1,9 @@
-﻿namespace Fortune.Services.Interfaces
+﻿using System.Reflection.Metadata;
+
+namespace Fortune.Services.Interfaces
 {
     public interface ITtsService
     {
-        string GetTTSBlob();
+        Task<byte[]> GetTTSBlob(string text);
     }
 }
